@@ -75,25 +75,22 @@ database:
   username: postgres
   password: ${UAA_DB_PASSWORD:admin}
 oauth:
-  user:
-    authorities:
-      - ocp.read
-      - ocp.write
   clients:
     ocp-ui:
-      authorized-grant-types: implicit
-      scope: ocp.read,ocp.write
-      redirect-uri: http://localhost:3000/login
-      authorities: uaa.resource      
+      authorized-grant-types: password
+      secret: changeit
+      scope: ocpUi.access,ocpUiApi.read,ocpUiApi.write
+      authorities: uaa.resource
 scim:
   groups:
-    ocp.read: Read OCP UI backend resource
-    ocp.write: Write OCP UI backend resource
+    ocpUi.access: Access OCP UI
+    ocpUiApi.read: Read OCP UI backend resource
+    ocpUiApi.write: Write OCP UI backend resource
   users:
 #  Configure additional OCP admin(users) as:
 #    - EmailId | password | EmailId | FirstName | LastName | <Comma saperated list of permissions>
 #  For example:  - sallyshare@mailinator.com|AAA#aaa1|sallyshare@mailinator.com|sally|share|ocp.read,ocp.write
-    - ocp-admin@mailinator.com|AAA#aaa1|ocp-admin@mailinator.com|admin|ocp|ocp.read,ocp.write
+    - ocp-admin@mailinator.com|AAA#aaa1|ocp-admin@mailinator.com|admin|ocp|ocpUi.access,ocpUiApi.read,ocpUiApi.write
 # The default configure properties for JWT Signing Key
 jwt:
   token:
