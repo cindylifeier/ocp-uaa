@@ -87,10 +87,10 @@ scim:
     ocpUiApi.read: Read OCP UI backend resource
     ocpUiApi.write: Write OCP UI backend resource
   users:
-#  Configure additional OCP admin(users) as:
+#  Configure additional OCP test(users) as:
 #    - EmailId | password | EmailId | FirstName | LastName | <Comma saperated list of permissions>
-#  For example:  - sallyshare@mailinator.com|AAA#aaa1|sallyshare@mailinator.com|sally|share|ocp.read,ocp.write
-    - ocp-admin@mailinator.com|AAA#aaa1|ocp-admin@mailinator.com|admin|ocp|ocpUi.access,ocpUiApi.read,ocpUiApi.write
+#  For example:  - test@ocpemail.com|AAA#aaa1|test@ocpemail.com|test|ocp|ocpUi.access,ocpUiApi.read,ocpUiApi.write
+    - ocp-test@ocpemail.com|AAA!aaa1|ocp-test@ocpemail.com|test|ocp|ocpUi.access,ocpUiApi.read,ocpUiApi.write
 # The default configure properties for JWT Signing Key
 jwt:
   token:
