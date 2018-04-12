@@ -97,11 +97,6 @@ scim:
     ocpUiApi.appointment_update: Update an Appointment FHIR Resource
     ocpUiApi.appointment_delete: Delete Appointment FHIR Resource
 
-    ocpUiApi.calendar_create: Create a Calendar FHIR Resource
-    ocpUiApi.calendar_read: Read a specific/restricted Calendar FHIR Resource
-    ocpUiApi.calendar_update: Update a Calendar FHIR Resource
-    ocpUiApi.calendar_delete: Delete Calendar FHIR Resource
-
     ocpUiApi.careTeam_create: Create a CareTeam FHIR Resource
     ocpUiApi.careTeam_read: Read a specific/restricted CareTeam FHIR Resource
     ocpUiApi.careTeam_update: Update a CareTeam FHIR Resource
