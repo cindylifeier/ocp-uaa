@@ -86,6 +86,74 @@ scim:
     ocpUi.access: Access OCP UI
     ocpUiApi.read: Read OCP UI backend resource
     ocpUiApi.write: Write OCP UI backend resource
+
+    ocpUiApi.activityDefinition_create: Create a ActivityDefinition FHIR Resource
+    ocpUiApi.activityDefinition_read: Read a specific/restricted ActivityDefinition FHIR Resource
+    ocpUiApi.activityDefinition_update: Update a ActivityDefinition FHIR Resource
+    ocpUiApi.activityDefinition_delete: Delete ActivityDefinition FHIR Resource
+
+    ocpUiApi.appointment_create: Create an Appointment FHIR Resource
+    ocpUiApi.appointment_read: Read a specific/restricted Appointment FHIR Resource
+    ocpUiApi.appointment_update: Update an Appointment FHIR Resource
+    ocpUiApi.appointment_delete: Delete Appointment FHIR Resource
+
+    ocpUiApi.calendar_create: Create a Calendar FHIR Resource
+    ocpUiApi.calendar_read: Read a specific/restricted Calendar FHIR Resource
+    ocpUiApi.calendar_update: Update a Calendar FHIR Resource
+    ocpUiApi.calendar_delete: Delete Calendar FHIR Resource
+
+    ocpUiApi.careTeam_create: Create a CareTeam FHIR Resource
+    ocpUiApi.careTeam_read: Read a specific/restricted CareTeam FHIR Resource
+    ocpUiApi.careTeam_update: Update a CareTeam FHIR Resource
+    ocpUiApi.careTeam_delete: Delete CareTeam FHIR Resource
+
+    ocpUiApi.communication_create: Create a Communication FHIR Resource
+    ocpUiApi.communication_read: Read a specific/restricted Communication FHIR Resource
+    ocpUiApi.communication_update: Update a Communication FHIR Resource
+    ocpUiApi.communication_delete: Delete Communication FHIR Resource
+
+    ocpUiApi.consent_create: Create a Consent FHIR Resource
+    ocpUiApi.consent_read: Read a specific/restricted Consent FHIR Resource
+    ocpUiApi.consent_update: Update a Consent FHIR Resource
+    ocpUiApi.consent_delete: Delete Consent FHIR Resource
+
+    ocpUiApi.healthcareService_create: Create a HealthCareService FHIR Resource
+    ocpUiApi.healthcareService_read: Read a specific/restricted HealthCareService FHIR Resource
+    ocpUiApi.healthcareService_assign: Assign a HealthCareService FHIR Resource to an Organization
+    ocpUiApi.healthcareService_unassign: Un-Assign a HealthCareService FHIR Resource from an Organization
+    ocpUiApi.healthcareService_update: Update a HealthCareService FHIR Resource
+    ocpUiApi.healthcareService_delete: Delete HealthCareService FHIR Resource
+
+    ocpUiApi.location_create: Create a Location FHIR Resource
+    ocpUiApi.location_read: Read a specific/restricted Location FHIR Resource
+    ocpUiApi.location_update: Update a Location FHIR Resource
+    ocpUiApi.location_delete: Delete Location FHIR Resource
+
+    ocpUiApi.organization_create: Write Organization FHIR Resource
+    ocpUiApi.organization_read: Read a specific/restricted Organization FHIR Resource
+    ocpUiApi.organization_update: Update an Organization FHIR Resource
+    ocpUiApi.organization_delete: Delete Organization FHIR Resource
+
+    ocpUiApi.patient_create: Create a Patient FHIR Resource
+    ocpUiApi.patient_read: Read a specific/restricted Patient FHIR Resource
+    ocpUiApi.patient_update: Update a Patient FHIR Resource
+    ocpUiApi.patient_delete: Delete Patient FHIR Resource
+
+    ocpUiApi.practitioner_create: Create a Practitioner FHIR Resource
+    ocpUiApi.practitioner_read: Read a specific/restricted Practitioner FHIR Resource
+    ocpUiApi.practitioner_update: Update a Practitioner FHIR Resource
+    ocpUiApi.practitioner_delete: Delete Practitioner FHIR Resource
+
+    ocpUiApi.relatedPerson_create: Create a RelatedPerson FHIR Resource
+    ocpUiApi.relatedPerson_read: Read a specific/restricted RelatedPerson FHIR Resource
+    ocpUiApi.relatedPerson_update: Update RelatedPerson FHIR Resource
+    ocpUiApi.relatedPerson_delete: Delete RelatedPerson FHIR Resource
+
+    ocpUiApi.task_read: Read a specific/restricted Task FHIR Resource
+    ocpUiApi.task_create: Create a Task FHIR Resource
+    ocpUiApi.task_update: Update a Task FHIR Resource
+    ocpUiApi.task_delete: Delete Task FHIR Resource
+
   users:
 #  Configure additional OCP test(users) as:
 #    - EmailId | password | EmailId | FirstName | LastName | <Comma saperated list of permissions>
