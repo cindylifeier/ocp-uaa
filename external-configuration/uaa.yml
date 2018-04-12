@@ -144,11 +144,6 @@ scim:
     ocpUiApi.practitioner_update: Update a Practitioner FHIR Resource
     ocpUiApi.practitioner_delete: Delete Practitioner FHIR Resource
 
-    ocpUiApi.relatedPerson_create: Create a RelatedPerson FHIR Resource
-    ocpUiApi.relatedPerson_read: Read a specific/restricted RelatedPerson FHIR Resource
-    ocpUiApi.relatedPerson_update: Update RelatedPerson FHIR Resource
-    ocpUiApi.relatedPerson_delete: Delete RelatedPerson FHIR Resource
-
     ocpUiApi.task_read: Read a specific/restricted Task FHIR Resource
     ocpUiApi.task_create: Create a Task FHIR Resource
     ocpUiApi.task_update: Update a Task FHIR Resource
