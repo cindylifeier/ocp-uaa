@@ -17,12 +17,17 @@ import org.cloudfoundry.identity.uaa.user.UaaUser;
 import org.cloudfoundry.identity.uaa.user.UaaUserDatabase;
 import org.cloudfoundry.identity.uaa.user.UserInfo;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.expression.OAuth2ExpressionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.security.Principal;
 
@@ -38,6 +43,9 @@ import static org.cloudfoundry.identity.uaa.oauth.token.ClaimConstants.USER_ATTR
 @Controller
 public class UserInfoEndpoint implements InitializingBean {
 
+    public static final String UAA_ADMIN = "uaa.admin";
+    public static final String USER_ID_KEY = "user_id";
+
     private UaaUserDatabase userDatabase;
 
     public void setUserDatabase(UaaUserDatabase userDatabase) {
@@ -49,7 +57,7 @@ public class UserInfoEndpoint implements InitializingBean {
         Assert.state(userDatabase != null, "A user database must be provided");
     }
 
-    @RequestMapping(value = "/userinfo")
+    @RequestMapping(value = "/userinfo" )
     @ResponseBody
     public UserInfoResponse loginInfo(Principal principal) {
         OAuth2Authentication authentication = (OAuth2Authentication) principal;
@@ -87,6 +95,18 @@ public class UserInfoEndpoint implements InitializingBean {
             response.setAttributeValue(ROLES, info.getRoles());
         }
         return response;
+    }
+
+    @RequestMapping(value = "/userinfo", method = RequestMethod.POST )
+    @ResponseStatus(HttpStatus.OK)
+    public void loginInfo(@RequestBody LinkedMultiValueMap<String, String> userAttributes, Principal principal) {
+        OAuth2Authentication authentication = (OAuth2Authentication) principal;
+        UaaPrincipal uaaPrincipal = extractUaaPrincipal(authentication);
+        boolean addCustomAttributes = OAuth2ExpressionUtils.hasAnyScope(authentication, new String[] {UAA_ADMIN});
+        String userId=userAttributes.getFirst(USER_ID_KEY);
+        userAttributes.remove(USER_ID_KEY);
+        userDatabase.storeUserInfo(userId, new UserInfo().setUserAttributes(userAttributes));
+
     }
 }
 
