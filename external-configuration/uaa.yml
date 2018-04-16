@@ -81,6 +81,11 @@ oauth:
       secret: changeit
       scope: ocpUi.access,ocpUiApi.read,ocpUiApi.write
       authorities: uaa.resource
+    admin-client:
+      authorized-grant-types: password
+      secret: changeit
+      scope: openid,uaa.admin,scim.write,groups.update,zones.uaa.admin
+      authorities: uaa.resource
 scim:
   groups:
     ocpUi.access: Access OCP UI
@@ -91,6 +96,7 @@ scim:
 #    - EmailId | password | EmailId | FirstName | LastName | <Comma saperated list of permissions>
 #  For example:  - test@ocpemail.com|AAA#aaa1|test@ocpemail.com|test|ocp|ocpUi.access,ocpUiApi.read,ocpUiApi.write
     - ocp-test@ocpemail.com|AAA!aaa1|ocp-test@ocpemail.com|test|ocp|ocpUi.access,ocpUiApi.read,ocpUiApi.write
+    - ocp-admin@ocpemail.com|AAA!aaa1|ocp-admin@ocpemail.com|test|ocp|openid,uaa.admin,scim.write,groups.update,zones.uaa.admin
 # The default configure properties for JWT Signing Key
 jwt:
   token:
