@@ -20,7 +20,7 @@ function getScimAdminToken(){
 token=$(curl --silent\
         -H "Content-Type:application/x-www-form-urlencoded" \
 		-H "Cache-Control: no-cache" \
-        -X POST --data "client_id=ocp-ui&grant_type=password&client_secret=changeit&username=scim-admin&response_type=token&password=AAA%21aaa1" "http://localhost:8080/uaa/oauth/token" | jsonValue access_token)
+        -X POST --data "client_id=admin-client&grant_type=password&client_secret=changeit&username=scim-admin&response_type=token&password=AAA%21aaa1" "http://localhost:8080/uaa/oauth/token" | jsonValue access_token)
 
 echo -e $token
 }
