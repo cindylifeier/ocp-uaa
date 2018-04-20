@@ -132,7 +132,7 @@ if [ "$resourceTypeChoice" -eq 1 ]
 then
   resourceType="Practitioner"
 elif [ "$resourceTypeChoice" -eq 2 ]
-then resourceType = "Patient"
+then resourceType="Patient"
 fi
 
 if [ "$resourceTypeChoice" -eq 1 ] || [ "$resourceTypeChoice" -eq 2 ]
