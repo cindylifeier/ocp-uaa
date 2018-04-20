@@ -6,7 +6,7 @@ echo -e "1. OCP Admin"
 echo -e "2. Case Manager/ Care Coordinator"
 echo -e "3. Care Manager"
 echo -e "4. Organization Admin"
-echo -e "4. Patient"
+echo -e "5. Patient"
 echo -e "Enter your choice :"
 read choice
 }
