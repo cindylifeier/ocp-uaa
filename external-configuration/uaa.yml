@@ -79,13 +79,16 @@ oauth:
     ocp-ui:
       authorized-grant-types: password
       secret: changeit
-      scope: ocpUi.access,ocpUiApi.read,ocpUiApi.write
+      scope: ocpUi.access,ocpUiApi.*,ocp.role.organization.*.*,ocp.role.*
+      authorities: uaa.resource
+    admin-client:
+      authorized-grant-types: password
+      secret: changeit
+      scope: openid,uaa.admin,scim.write,groups.update,zones.uaa.admin
       authorities: uaa.resource
 scim:
   groups:
     ocpUi.access: Access OCP UI
-    ocpUiApi.read: Read OCP UI backend resource
-    ocpUiApi.write: Write OCP UI backend resource
 
     ocpUiApi.activityDefinition_create: Create a ActivityDefinition FHIR Resource
     ocpUiApi.activityDefinition_read: Read a specific/restricted ActivityDefinition FHIR Resource
@@ -148,7 +151,7 @@ scim:
 #  Configure additional OCP test(users) as:
 #    - EmailId | password | EmailId | FirstName | LastName | <Comma saperated list of permissions>
 #  For example:  - test@ocpemail.com|AAA#aaa1|test@ocpemail.com|test|ocp|ocpUi.access,ocpUiApi.read,ocpUiApi.write
-    - ocp-test@ocpemail.com|AAA!aaa1|ocp-test@ocpemail.com|test|ocp|ocpUi.access,ocpUiApi.read,ocpUiApi.write
+    - scim-admin|AAA!aaa1|ocp-admin@ocpemail.com|test|ocp|openid,uaa.admin,scim.write,groups.update,zones.uaa.admin
 # The default configure properties for JWT Signing Key
 jwt:
   token:
