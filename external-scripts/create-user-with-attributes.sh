@@ -86,7 +86,7 @@ replacedString=${tmp//_/%5F}
 result=$(curl --silent \
 	-H "Authorization: $bearerToken" \
 	-H "Cache-Control: no-cache" \
-	GET "http://localhost:8080/uaa/Groups?filter=displayName+eq+%22$replacedString%22")
+	GET "$UAA_BASE_URL/Groups?filter=displayName+eq+%22$replacedString%22")
 groupId=`echo  -e $result | grep -Po '"id": *\K"[^"]*"'  | tr -d '"'`
 }
 
