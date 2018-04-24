@@ -1,8 +1,8 @@
 # A note on using the scripts present in this directory
 
-There are three scripts in this directory. One, `create-role-with-scopes.sh`, is used to create role for a selected organization ( or a `ocpAdmin` who does not need to be associated with an organization). Another, `create-user-with-attributes.sh` is used to associate a Practitioner or a Patient with the created role allowing you to login to the OCP UI. `add-role-as-member-of-scope.sh` is used to add existing scope to existing role for OCP UI.
+There are three scripts in this directory. One, `create-role-with-scopes.sh`, is used to create role for a selected organization ( or a `ocpAdmin` who does not need to be associated with an organization). Second, `create-user-with-attributes.sh` is used to associate a Practitioner or a Patient with the created role allowing you to login to the OCP UI. Third, `add-role-as-member-of-scope.sh` is used to add additional scopes to a existing role for OCP UI.
 
-Note: At the moment, once a role is created for an organization, we do not support editing or deleting the role. However, you may change the `create-role-with-scopes.sh` script to add more scopes for a role before creating a new one. When you attempt to create a new role that's already present, the script simply exits.
+Note: At the moment, once a role is created for an organization, we do not support editing or deleting the role. However, you may change the `create-role-with-scopes.sh` script to add more scopes for a role before creating a new one. Further, you can also add additional scopes to an existing role using the script `add-role-as-member-of-scope.sh`. When you attempt to create a new role that's already present, the script simply exits.
 
 ## Steps
 1.  Run the script using Git Bash: `./create-role-with-scopes.sh`. Creating each role takes a few minutes.  Be patient while the script finishes. You may create all of the desired roles one-by-one at this stage. If you are asked to enter an Organization ID, enter the FHIR resource ID of the Organization to which you want to associate the role. Be sure to use this Organization ID in Steps #4 and #6 in place of `<orgId>`. 
