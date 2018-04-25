@@ -55,7 +55,6 @@ roleId=$(curl --silent \
 	-H "Content-Type: application/json" \
 	-H "Authorization: $3" \
 	POST --data '{"displayName": "$1", "description" : "$2"}' "http://localhost:8080/uaa/Groups" | jsonValue id)
-#echo -e "Response : $roleId"
 }
 
 function createRoleAndAddScopes(){
@@ -67,14 +66,13 @@ totalResults=$(curl --silent \
 	GET "http://localhost:8080/uaa/Groups?filter=displayName+eq+%22$replacedString%22" | jsonValue totalResults)
 
 if [ "$totalResults" -eq 0 ]; then
-   echo "Creating a new role"
 	roleId=$(curl --silent \
 		-H "Cache-Control: no-cache" \
 		-H "Content-Type: application/json" \
 		-H "Authorization: $3" \
 		POST --data '{"displayName": "'"$1"'", "description" : "'"$2"'"}' "http://localhost:8080/uaa/Groups"  | jsonValue id)
 
-echo -e "Created new role with Id : $roleId"
+echo -e "Created the new role."
 
 ocpAdminScope=(ocpUi.access ocpUiApi.organization_create ocpUiApi.organization_read ocpUiApi.organization_update ocpUiApi.organization_delete ocpUiApi.patient_create ocpUiApi.patient_read ocpUiApi.patient_update ocpUiApi.patient_delete ocpUiApi.practitioner_create ocpUiApi.practitioner_read ocpUiApi.practitioner_update ocpUiApi.practitioner_delete ocpUiApi.location_create ocpUiApi.location_read ocpUiApi.location_update ocpUiApi.location_delete ocpUiApi.healthcareService_create ocpUiApi.healthcareService_read ocpUiApi.healthcareService_assign ocpUiApi.healthcareService_unassign ocpUiApi.healthcareService_update ocpUiApi.healthcareService_delete ocpUiApi.activityDefinition_create ocpUiApi.activityDefinition_read ocpUiApi.activityDefinition_update ocpUiApi.activityDefinition_delete ocpUiApi.relatedPerson_read)
 
@@ -96,118 +94,100 @@ frontOfficeReceptionistScope=(ocpUi.access ocpUiApi.activityDefinition_read ocpU
 
 case "$4" in
 		1)
-			echo -e "Adding scopes to $1"
-			echo "Number of scopes to be added: ${#ocpAdminScope[*]}"
+			echo -e "Adding permissions to $1"
+			echo "Number of permissions to be added: ${#ocpAdminScope[*]}"
 			for index in ${!ocpAdminScope[*]}
 			do
 				groupId=`getGroupId "${ocpAdminScope[$index]}" "${bearerToken}"`
-				echo -e "\n Got Group Id for ${ocpAdminScope[$index]}"
 				createGroupMembership "${groupId}" "${roleId}" "${bearerToken}"
-				echo -e "\n Created membership between ${ocpAdminScope[$index]} and ${1}"
 				echo -e "\n Done: $((index+1)) of ${#ocpAdminScope[*]}"
 			done
 			break
 			;;
 		2)
-			echo -e "Adding scopes to $1"
-			echo "Number of scopes to be added: ${#patientScope[*]}"
+			echo -e "Adding permissions to $1"
+			echo "Number of permissions to be added: ${#patientScope[*]}"
 			for index in ${!patientScope[*]}
 			do
 				groupId=`getGroupId "${patientScope[$index]}" "${bearerToken}"`
-				echo -e "\n Got Group Id for ${patientScope[$index]}"
 				createGroupMembership "${groupId}" "${roleId}" "${bearerToken}"
-				echo -e "\n Created membership between ${patientScope[$index]} and ${1}"
 				echo -e "\n Done: $((index+1)) of ${#patientScope[*]}"
 			done
 			break
 			;;			
 		3)
-			echo -e "Adding scopes to $1"
-			echo "Number of scopes to be added: ${#careCoordinatorScope[*]}"
+			echo -e "Adding permissions to $1"
+			echo "Number of permissions to be added: ${#careCoordinatorScope[*]}"
 			for index in ${!careCoordinatorScope[*]}
 			do
 				groupId=`getGroupId "${careCoordinatorScope[$index]}" "${bearerToken}"`
-				echo -e "\n Got Group Id for ${careCoordinatorScope[$index]}"
 				createGroupMembership "${groupId}" "${roleId}" "${bearerToken}"
-				echo -e "\n Created membership between ${careCoordinatorScope[$index]} and ${1}"
 				echo -e "\n Done: $((index+1)) of ${#careCoordinatorScope[*]}"
 			done
 			break
 			;;
 		4)
-			echo -e "Adding scopes to $1"
-			echo "Number of scopes to be added: ${#careManagerScope[*]}"
+			echo -e "Adding permissions to $1"
+			echo "Number of permissions to be added: ${#careManagerScope[*]}"
 			for index in ${!careManagerScope[*]}
 			do
 				groupId=`getGroupId "${careManagerScope[$index]}" "${bearerToken}"`
-				echo -e "\n Got Group Id for ${careManagerScope[$index]}"
 				createGroupMembership "${groupId}" "${roleId}" "${bearerToken}"
-				echo -e "\n Created membership between ${careManagerScope[$index]} and ${1}"
 				echo -e "\n Done: $((index+1)) of ${#careManagerScope[*]}"
 			done
 			break
 			;;
 		5)
-			echo -e "Adding scopes to $1"
-			echo "Number of scopes to be added: ${#orgAdminScope[*]}"
+			echo -e "Adding permissions to $1"
+			echo "Number of permissions to be added: ${#orgAdminScope[*]}"
 			for index in ${!orgAdminScope[*]}
 			do
 				groupId=`getGroupId "${orgAdminScope[$index]}" "${bearerToken}"`
-				echo -e "\n Got Group Id for ${orgAdminScope[$index]}"
 				createGroupMembership "${groupId}" "${roleId}" "${bearerToken}"
-				echo -e "\n Created membership between ${orgAdminScope[$index]} and ${1}"
 				echo -e "\n Done: $((index+1)) of ${#orgAdminScope[*]}"
 			done
 			break
 			;;	
 		6)
-			echo -e "Adding scopes to $1"
-			echo "Number of scopes to be added: ${#pcpScope[*]}"
+			echo -e "Adding permissions to $1"
+			echo "Number of permissions to be added: ${#pcpScope[*]}"
 			for index in ${!pcpScope[*]}
 			do
 				groupId=`getGroupId "${pcpScope[$index]}" "${bearerToken}"`
-				echo -e "\n Got Group Id for ${pcpScope[$index]}"
 				createGroupMembership "${groupId}" "${roleId}" "${bearerToken}"
-				echo -e "\n Created membership between ${pcpScope[$index]} and ${1}"
 				echo -e "\n Done: $((index+1)) of ${#pcpScope[*]}"
 			done
 			break
 			;;
 		7)
-			echo -e "Adding scopes to $1"
-			echo "Number of scopes to be added: ${#benefitsSpecialistScope[*]}"
+			echo -e "Adding permissions to $1"
+			echo "Number of permissions to be added: ${#benefitsSpecialistScope[*]}"
 			for index in ${!benefitsSpecialistScope[*]}
 			do
 				groupId=`getGroupId "${benefitsSpecialistScope[$index]}" "${bearerToken}"`
-				echo -e "\n Got Group Id for ${benefitsSpecialistScope[$index]}"
 				createGroupMembership "${groupId}" "${roleId}" "${bearerToken}"
-				echo -e "\n Created membership between ${benefitsSpecialistScope[$index]} and ${1}"
 				echo -e "\n Done: $((index+1)) of ${#benefitsSpecialistScope[*]}"
 			done
 			break
 			;;
 		8)
-			echo -e "Adding scopes to $1"
-			echo "Number of scopes to be added: ${#healthAssistantScope[*]}"
+			echo -e "Adding permissions to $1"
+			echo "Number of permissions to be added: ${#healthAssistantScope[*]}"
 			for index in ${!healthAssistantScope[*]}
 			do
 				groupId=`getGroupId "${healthAssistantScope[$index]}" "${bearerToken}"`
-				echo -e "\n Got Group Id for ${healthAssistantScope[$index]}"
 				createGroupMembership "${groupId}" "${roleId}" "${bearerToken}"
-				echo -e "\n Created membership between ${healthAssistantScope[$index]} and ${1}"
 				echo -e "\n Done: $((index+1)) of ${#healthAssistantScope[*]}"
 			done
 			break
 			;;
 		9)
-			echo -e "Adding scopes to $1"
-			echo "Number of scopes to be added: ${#frontOfficeReceptionistScope[*]}"
+			echo -e "Adding permissions to $1"
+			echo "Number of permissions to be added: ${#frontOfficeReceptionistScope[*]}"
 			for index in ${!frontOfficeReceptionistScope[*]}
 			do
 				groupId=`getGroupId "${frontOfficeReceptionistScope[$index]}" "${bearerToken}"`
-				echo -e "\n Got Group Id for ${frontOfficeReceptionistScope[$index]}"
 				createGroupMembership "${groupId}" "${roleId}" "${bearerToken}"
-				echo -e "\n Created membership between ${frontOfficeReceptionistScope[$index]} and ${1}"
 				echo -e "\n Done: $((index+1)) of ${#frontOfficeReceptionistScope[*]}"
 			done
 			break
