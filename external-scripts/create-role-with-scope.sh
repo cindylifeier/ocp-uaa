@@ -217,87 +217,71 @@ while [ choice != '' ]
 		1)
 			echo -e "You have chosen to create a OCP Admin"
 			role="ocp.role.ocpAdmin";
-			description="OCP Admin";
+			description="OCP Admin Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
 			break
 			;;
 		2)
 			echo -e "You have chosen to create a Patient"
-			echo -e "What Organization ID does this Patient belong to?"
-			read org
-			role="ocp.role.organization.${org}.patient";
-			description="Role Patient for Organization : ${org}";
+			role="ocp.role.organization.patient";
+			description="Patient Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
 			break
 			;;	
 		3)
-			echo -e "You have chosen to create a Case Manager/ Care Coordinator"
-			echo -e "What Organization ID does this Case Manager/ Care Coordinator belong to?"
-			read org
-			role="ocp.role.organization.${org}.careCoordinator";
-			description="Case Manager/ Care Coordinator for Organization : ${org}";
+			echo -e "You have chosen to create a Case Manager / Care Coordinator"
+			role="ocp.role.organization.careCoordinator";
+			description="Case Manager/ Care Coordinator Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
 			break
 			;;
 		4)
 			echo -e "You have chosen to create a Care Manager"
-			echo -e "What Organization ID does this Care Manager belong to?"
-			read org
-			role="ocp.role.organization.${org}.careManager";
-			description="Care Manager for Organization : ${org}";
+			role="ocp.role.organization.careManager";
+			description="Care Manager Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
 			break
 			;;
 		5)
 			echo -e "You have chosen to create a Organization Admin"
-			echo -e "What Organization ID does this Organization Admin belong to?"
-			read org
-			role="ocp.role.organization.${org}.organizationAdministrator";
-			description="Role Organization Administrator for Organization : ${org}";
+			role="ocp.role.organization.organizationAdministrator";
+			description="Organization Administrator Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
 			break
 			;;
 		6)
 			echo -e "You have chosen to create a Primary Care Provider"
-			echo -e "What Organization ID does this Primary Care Provider belong to?"
-			read org
-			role="ocp.role.organization.${org}.primaryCareProvider";
-			description="Primary Care Provider for Organization : ${org}";
+			role="ocp.role.organization.primaryCareProvider";
+			description="Primary Care Provider Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
 			break
 			;;
 		7)
 			echo -e "You have chosen to create a Benefits Specialist"
-			echo -e "What Organization ID does this Benefits Specialist belong to?"
-			read org
-			role="ocp.role.organization.${org}.benefitsSpecialist";
-			description="Benefits Specialist for Organization : ${org}";
+			role="ocp.role.organization.benefitsSpecialist";
+			description="Benefits Specialist Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
 			break
 			;;
 		8)
 			echo -e "You have chosen to create a Health Assistant"
-			echo -e "What Organization ID does this Health Assistant belong to?"
-			read org
-			role="ocp.role.organization.${org}.healthAssistant";
-			description="Health Assistant for Organization : ${org}";
+			role="ocp.role.organization.healthAssistant";
+			description="Health Assistant Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
 			break
 			;;
 		9)
 			echo -e "You have chosen to create a Front Office Receptionist"
-			echo -e "What Organization ID does this Front Office Receptionist belong to?"
-			read org
-			role="ocp.role.organization.${org}.frontOfficeReceptionist";
-			description="Front Office Receptionist for Organization : ${org}";
+			role="ocp.role.organization.frontOfficeReceptionist";
+			description="Front Office Receptionist Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
 			break
