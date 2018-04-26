@@ -62,7 +62,8 @@ generate_post_create_userinfo()
       {
           "user_id": ["$userId"],
           "resource": ["$resourceType"],
-          "id" : ["$resourceId"]
+          "id" : ["$resourceId"],
+		  "orgId" : ["$orgId"]
        }
 EOF
 }
@@ -79,10 +80,8 @@ userinfo=$(curl --silent \
 
 #Get role group id by display name
 function getGroupId(){
-#echo "\n Checking status..."
 tmp=${1//./%2E}
 replacedString=${tmp//_/%5F}
-#echo -e "\n Replaced String : $replacedString"
 result=$(curl --silent \
 	-H "Authorization: $bearerToken" \
 	-H "Cache-Control: no-cache" \
@@ -137,8 +136,10 @@ fi
 
 if [ "$resourceTypeChoice" -eq 1 ] || [ "$resourceTypeChoice" -eq 2 ]
 then
-  echo -n "Please choose fhir resource id: "
-  read resourceId
+	echo -n "Please enter the Org ID to which this user belong to : "
+	read orgId
+	echo -n "Please choose fhir resource id: "
+	read resourceId
 fi
 
 echo -e "${red}Step 1 of 4:  getting token...${reset}"
@@ -154,7 +155,7 @@ echo -e "${red}Step 3 of 4: Creating userinfo with fhir resource...${reset}"
 if [ "$resourceTypeChoice" -eq 1 ] || [ "$resourceTypeChoice" -eq 2 ]
 then
 createUserinfo
-elif [ "$resourceTypeChoice" -eq 2 ]
+elif [ "$resourceTypeChoice" -eq 3 ]
 then echo -e "Skip...  None fhir resource "
 fi
 
