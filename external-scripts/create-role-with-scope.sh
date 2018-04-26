@@ -224,7 +224,7 @@ while [ choice != '' ]
 			;;
 		2)
 			echo -e "You have chosen to create a Patient"
-			role="ocp.role.organization.patient";
+			role="ocp.role.patient";
 			description="Patient Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
@@ -232,7 +232,7 @@ while [ choice != '' ]
 			;;	
 		3)
 			echo -e "You have chosen to create a Case Manager / Care Coordinator"
-			role="ocp.role.organization.careCoordinator";
+			role="ocp.role.careCoordinator";
 			description="Case Manager/ Care Coordinator Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
@@ -240,7 +240,7 @@ while [ choice != '' ]
 			;;
 		4)
 			echo -e "You have chosen to create a Care Manager"
-			role="ocp.role.organization.careManager";
+			role="ocp.role.careManager";
 			description="Care Manager Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
@@ -248,7 +248,7 @@ while [ choice != '' ]
 			;;
 		5)
 			echo -e "You have chosen to create a Organization Admin"
-			role="ocp.role.organization.organizationAdministrator";
+			role="ocp.role.organizationAdministrator";
 			description="Organization Administrator Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
@@ -256,7 +256,7 @@ while [ choice != '' ]
 			;;
 		6)
 			echo -e "You have chosen to create a Primary Care Provider"
-			role="ocp.role.organization.primaryCareProvider";
+			role="ocp.role.primaryCareProvider";
 			description="Primary Care Provider Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
@@ -264,7 +264,7 @@ while [ choice != '' ]
 			;;
 		7)
 			echo -e "You have chosen to create a Benefits Specialist"
-			role="ocp.role.organization.benefitsSpecialist";
+			role="ocp.role.benefitsSpecialist";
 			description="Benefits Specialist Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
@@ -272,7 +272,7 @@ while [ choice != '' ]
 			;;
 		8)
 			echo -e "You have chosen to create a Health Assistant"
-			role="ocp.role.organization.healthAssistant";
+			role="ocp.role.healthAssistant";
 			description="Health Assistant Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
@@ -280,7 +280,7 @@ while [ choice != '' ]
 			;;
 		9)
 			echo -e "You have chosen to create a Front Office Receptionist"
-			role="ocp.role.organization.frontOfficeReceptionist";
+			role="ocp.role.frontOfficeReceptionist";
 			description="Front Office Receptionist Role";
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
