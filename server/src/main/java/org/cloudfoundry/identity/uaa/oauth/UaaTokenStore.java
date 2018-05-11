@@ -49,6 +49,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class UaaTokenStore implements AuthorizationCodeServices {
@@ -96,9 +97,10 @@ public class UaaTokenStore implements AuthorizationCodeServices {
         performExpirationClean();
         JdbcTemplate template = new JdbcTemplate(dataSource);
         int tries = 0;
+        final Optional<String> launch = SmartLaunchRequestParameterHolder.getLaunchRequestParam();
         while ((tries++)<=max_tries) {
             try {
-                String code = generator.generate();
+                String code = generator.generate() + (launch.isPresent() ? SmartLaunchRequestParameterHolder.DELIMITER + launch.get() : "");
                 long expiresAt = System.currentTimeMillis()+getExpirationTime();
                 String userId = authentication.getUserAuthentication()==null ? null : ((UaaPrincipal)authentication.getUserAuthentication().getPrincipal()).getId();
                 String clientId = authentication.getOAuth2Request().getClientId();

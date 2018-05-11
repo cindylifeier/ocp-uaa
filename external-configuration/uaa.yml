@@ -86,6 +86,9 @@ oauth:
       secret: changeit
       scope: openid,uaa.admin,scim.write,groups.update,zones.uaa.admin
       authorities: uaa.resource
+
+smart:
+  launch-context-uri: http://localhost:8445/launches/{launch}?user={user}
 scim:
   groups:
     ocpUi.access: Access OCP UI

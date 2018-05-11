@@ -33,6 +33,7 @@ import org.cloudfoundry.identity.uaa.user.UaaAuthority;
 import org.cloudfoundry.identity.uaa.user.UaaUser;
 import org.cloudfoundry.identity.uaa.user.UaaUserDatabase;
 import org.cloudfoundry.identity.uaa.util.JsonUtils;
+import org.cloudfoundry.identity.uaa.util.RestTemplateFactory;
 import org.cloudfoundry.identity.uaa.util.TokenValidation;
 import org.cloudfoundry.identity.uaa.util.UaaTokenUtils;
 import org.cloudfoundry.identity.uaa.zone.ClientServicesExtension;
@@ -74,6 +75,7 @@ import org.springframework.security.oauth2.provider.token.AuthorizationServerTok
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -168,6 +170,26 @@ public class UaaTokenServices implements AuthorizationServerTokenServices, Resou
     private boolean restrictRefreshGrant;
 
     private UaaTokenEnhancer uaaTokenEnhancer = null;
+
+    private RestTemplateFactory restTemplateFactory = null;
+
+    private String smartLaunchContextUri = null;
+
+    public RestTemplateFactory getRestTemplateFactory() {
+        return restTemplateFactory;
+    }
+
+    public void setRestTemplateFactory(RestTemplateFactory restTemplateFactory) {
+        this.restTemplateFactory = restTemplateFactory;
+    }
+
+    public String getSmartLaunchContextUri() {
+        return smartLaunchContextUri;
+    }
+
+    public void setSmartLaunchContextUri(String smartLaunchContextUri) {
+        this.smartLaunchContextUri = smartLaunchContextUri;
+    }
 
     public Set<String> getExcludedClaims() {
         return excludedClaims;
@@ -610,6 +632,17 @@ public class UaaTokenServices implements AuthorizationServerTokenServices, Resou
             response.remove(excludedClaim);
         }
 
+        // Inject SMART on FHIR context parameters to token if authorization code is derived from a SMART on FHIR launch
+        SmartLaunchRequestParameterHolder.getLaunchFromCodeRequestParam()
+                .ifPresent(launch -> {
+                    final RestTemplate restTemplate = restTemplateFactory.getRestTemplate(false);
+                    final Map<String, Object> launchParams = restTemplate.getForObject(smartLaunchContextUri, Map.class, launch, userId);
+                    launchParams.forEach((k,v) -> {
+                        if(!response.containsKey(k)) {
+                            response.put(k, v);
+                        }
+                    });
+                });
         return response;
     }
 
