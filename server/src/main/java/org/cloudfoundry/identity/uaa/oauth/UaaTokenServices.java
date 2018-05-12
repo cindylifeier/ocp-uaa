@@ -639,7 +639,13 @@ public class UaaTokenServices implements AuthorizationServerTokenServices, Resou
                     final Map<String, Object> launchParams = restTemplate.getForObject(smartLaunchContextUri, Map.class, launch, userId);
                     launchParams.forEach((k,v) -> {
                         if(!response.containsKey(k)) {
+                            // Puts SMART launch context into access token
                             response.put(k, v);
+                            // UAA appends additionalInformation to tokenResponse, so injecting SMART launch context here also puts them in the token response
+                            final Map<String, Object> additionalInformation = token.getAdditionalInformation();
+                            if(additionalInformation != null && !additionalInformation.containsKey(k)){
+                                additionalInformation.put(k, v);
+                            }
                         }
                     });
                 });
