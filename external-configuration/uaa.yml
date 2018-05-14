@@ -89,6 +89,11 @@ oauth:
 
 smart:
   launch-context-uri: http://localhost:8445/launches/{launch}?user={user}
+logout:
+  redirect:
+    parameter:
+      whitelist:
+        - http://localhost:3000
 scim:
   groups:
     ocpUi.access: Access OCP UI
