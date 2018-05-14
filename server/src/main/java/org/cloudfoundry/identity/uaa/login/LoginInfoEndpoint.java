@@ -697,14 +697,13 @@ public class LoginInfoEndpoint {
     public String performAutologin(HttpSession session,
                                    @RequestParam(value = "autologin_redirect_uri", required = false) String autologinRedirectUri) {
         String redirectLocation = "home";
-        if(StringUtils.hasText(autologinRedirectUri)){
-            redirectLocation = autologinRedirectUri;
-        }
         SavedRequest savedRequest = (SavedRequest) session.getAttribute(SAVED_REQUEST_SESSION_ATTRIBUTE);
         if (savedRequest != null && savedRequest.getRedirectUrl() != null) {
             redirectLocation = savedRequest.getRedirectUrl();
         }
-
+        if(StringUtils.hasText(autologinRedirectUri)){
+            redirectLocation = autologinRedirectUri;
+        }
         return "redirect:" + redirectLocation;
     }
 
