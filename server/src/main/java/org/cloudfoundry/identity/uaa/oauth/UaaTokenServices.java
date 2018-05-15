@@ -32,6 +32,7 @@ import org.cloudfoundry.identity.uaa.oauth.token.TokenConstants;
 import org.cloudfoundry.identity.uaa.user.UaaAuthority;
 import org.cloudfoundry.identity.uaa.user.UaaUser;
 import org.cloudfoundry.identity.uaa.user.UaaUserDatabase;
+import org.cloudfoundry.identity.uaa.user.UserInfo;
 import org.cloudfoundry.identity.uaa.util.JsonUtils;
 import org.cloudfoundry.identity.uaa.util.RestTemplateFactory;
 import org.cloudfoundry.identity.uaa.util.TokenValidation;
@@ -74,6 +75,7 @@ import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.util.Assert;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
@@ -90,6 +92,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -541,6 +544,19 @@ public class UaaTokenServices implements AuthorizationServerTokenServices, Resou
                 }
 
                 if(scopes.contains(PROFILE) && user != null) {
+                    // SMART on FHIR id_token support for appending FHIR Resource when profile scope is available
+                    final Optional<MultiValueMap<String, String>> userAttributes = Optional.ofNullable(userDatabase.getUserInfo(user.getId()))
+                            .map(UserInfo::getUserAttributes);
+                    final Optional<String> resourceType = userAttributes
+                            .map(map -> map.get("resource"))
+                            .filter(list -> !list.isEmpty())
+                            .map(list -> list.get(0));
+                    final Optional<String> id = userAttributes
+                            .map(map -> map.get("id"))
+                            .filter(list -> !list.isEmpty())
+                            .map(list -> list.get(0));
+                    if(resourceType.isPresent() && id.isPresent()) clone.put(PROFILE, resourceType.get() + "/" + id.get());
+
                     String givenName = user.getGivenName();
                     if(givenName != null) clone.put(GIVEN_NAME, givenName);
 
