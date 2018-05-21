@@ -86,7 +86,11 @@ oauth:
       secret: changeit
       scope: openid,uaa.admin,scim.write,groups.update,zones.uaa.admin
       authorities: uaa.resource
-
+    smart-core:
+      authorized-grant-types: client_credentials
+      secret: changeit
+      scope: uaa.none
+      authorities: clients.read,clients.write
 smart:
   launch-context-uri: http://localhost:8445/launch/{launch}?user={user}
 logout:
