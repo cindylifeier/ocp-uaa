@@ -155,6 +155,67 @@ scim:
     ocpUiApi.task_update: Update a Task FHIR Resource
     ocpUiApi.task_delete: Delete Task FHIR Resource
 
+# Smart on Fhir FHIR launch scopes which utilized by Smart on Fhir App
+    launch: Permission to obtain launch context
+    launch/patient: Required for patient launch context
+    launch/organization: Required for organization launch context
+    launch/location: Required for location launch context
+
+# Smart on Fhir FHIR Resource scopes which utilized by Smart on Fhir App
+    patient/Patient.read: Read Location FHIR Resource
+    patient/Patient.write: Write Location FHIR Resource
+
+    patient/Appointment.read: Read Appointment FHIR Resource
+    patient/Appointment.write: Write Appointment FHIR Resource
+
+    patient/ActivityDefinition.read: Read ActivityDefinition FHIR Resource
+    patient/ActivityDefinition.write: Write ActivityDefinition FHIR Resource
+
+    patient/Consent.read: Read Consent FHIR Resource
+    patient/Consent.write: Write Consent FHIR Resource
+
+    patient/CareTeam.read: Read CareTeam FHIR Resource
+    patient/CareTeam.write: Write CareTeam FHIR Resource
+
+    patient/Communication.read: Read Communication FHIR Resource
+    patient/Communication.write: Write Communication FHIR Resource
+
+    patient/EpisodeOfCare.read: Read EpisodeOfCare FHIR Resource
+    patient/EpisodeOfCare.write: Write EpisodeOfCare FHIR Resource
+
+    patient/Flag.read: Read Flag FHIR Resource
+    patient/Flag.write: Write Flag FHIR Resource
+
+    patient/HealthcareService.read: Read HealthcareService FHIR Resource
+    patient/HealthcareService.write: Write HealthcareService FHIR Resource
+
+    patient/Location.read: Read Location FHIR Resource
+    patient/Location.write: Write Location FHIR Resource
+
+    patient/Observation.read: Read Organization FHIR Resource
+    patient/Observation.write: Write Organization FHIR Resource
+
+    patient/Organization.read: Read Organization FHIR Resource
+    patient/Organization.write: Write Organization FHIR Resource
+
+    patient/Practitioner.read: Read Practitioner FHIR Resource
+    patient/Practitioner.write: Write Practitioner FHIR Resource
+
+    patient/PractitionerRole.read: Read PractitionerRole FHIR Resource
+    patient/PractitionerRole.write: Write PractitionerRole FHIR Resource
+
+    patient/RelatedPerson.read: Read RelatedPerson FHIR Resource
+    patient/RelatedPerson.write: Write RelatedPerson FHIR Resource
+
+    patient/StructureDefinition.read: Read StructureDefinition FHIR Resource
+    patient/StructureDefinition.write: Write StructureDefinition FHIR Resource
+
+    patient/Task.read: Read Task FHIR Resource
+    patient/Task.write: Write Task FHIR Resource
+
+    patient/ValueSet.read: Read ValueSet FHIR Resource
+    patient/ValueSet.write: Write ValueSet FHIR Resource
+
   users:
 #  Configure additional OCP test(users) as:
 #    - EmailId | password | EmailId | FirstName | LastName | <Comma saperated list of permissions>
