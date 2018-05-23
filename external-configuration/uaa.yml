@@ -167,44 +167,94 @@ scim:
     launch/location: The current location selection
 
 # Smart on Fhir FHIR Resource scopes which utilized by Smart on Fhir App
+#	Administration
     patient/Patient.read: Read Patient data on the current patient
     patient/Patient.write: Write Patient data on the current patient
-
-    patient/Appointment.read: Read Appointment data on the current patient
-    patient/Appointment.write: Write Appointment data on the current patient
-
-    patient/ActivityDefinition.read: Read ActivityDefinition data on the current patient
-    patient/ActivityDefinition.write: Write ActivityDefinition data on the current patient
-
-    patient/Consent.read: Read Consent data on the current patient
-    patient/Consent.write: Write Consent data on the current patient
-
-    patient/CareTeam.read: Read CareTeam data on the current patient
-    patient/CareTeam.write: Write CareTeam data on the current patient
-
-    patient/Communication.read: Read Communication data on the current patient
-    patient/Communication.write: Write Communication data on the current patient
-
-    patient/EpisodeOfCare.read: Read EpisodeOfCare data on the current patient
-    patient/EpisodeOfCare.write: Write EpisodeOfCare data on the current patient
-
-    patient/Flag.read: Read Flag data on the current patient
-    patient/Flag.write: Write Flag data on the current patient
-
-    patient/Observation.read: Read Observation data on the current patient
-    patient/Observation.write: Write Observation data on the current patient
-
-    patient/Organization.read: Read Organization data on the current patient
-    patient/Organization.write: Write Organization data on the current patient
-
-    patient/Practitioner.read: Read Practitioner data on the current patient
-    patient/Practitioner.write: Write Practitioner data on the current patient
 
     patient/RelatedPerson.read: Read RelatedPerson data on the current patient
     patient/RelatedPerson.write: Write RelatedPerson data on the current patient
 
+    patient/EpisodeOfCare.read: Read EpisodeOfCare data on the current patient
+    patient/EpisodeOfCare.write: Write EpisodeOfCare data on the current patient
+
+    patient/Coverage.read: Read Coverage data on the current patient
+    patient/Coverage.write: Write Coverage data on the current patient
+
+#	Workflow
+    patient/Communication.read: Read Communication data on the current patient
+    patient/Communication.write: Write Communication data on the current patient
+
+    patient/Flag.read: Read Flag data on the current patient
+    patient/Flag.write: Write Flag data on the current patient
+
+    patient/ActivityDefinition.read: Read ActivityDefinition data on the current patient
+    patient/ActivityDefinition.write: Write ActivityDefinition data on the current patient
+
     patient/Task.read: Read Task data on the current patient
     patient/Task.write: Write Task data on the current patient
+
+    patient/Appointment.read: Read Appointment data on the current patient
+    patient/Appointment.write: Write Appointment data on the current patient
+
+#	Clinical
+    patient/AllergyIntolerence.read: Read AllergyIntolerence data on the current patient
+    patient/AllergyIntolerence.write: Write AllergyIntolerence data on the current patient
+
+    patient/Condition.read: Read Condition data on the current patient
+    patient/Condition.write: Write Condition data on the current patient
+
+    patient/Procedure.read: Read Procedure data on the current patient
+    patient/Procedure.write: Write Procedure data on the current patient
+
+    patient/ClinicalImpression.read: Read ClinicalImpression data on the current patient
+    patient/ClinicalImpression.write: Write ClinicalImpression data on the current patient
+
+    patient/Observation.read: Read Observation data on the current patient
+    patient/Observation.write: Write Observation data on the current patient
+
+    patient/Specimen.read: Read Specimen data on the current patient
+    patient/Specimen.write: Write Specimen data on the current patient
+
+    patient/DiagnosticReport.read: Read DiagnosticReport data on the current patient
+    patient/DiagnosticReport.write: Write DiagnosticReport data on the current patient
+
+    patient/Medication.read: Read Medication data on the current patient
+    patient/Medication.write: Write Medication data on the current patient
+
+    patient/MedicationRequest.read: Read MedicationRequest data on the current patient
+    patient/MedicationRequest.write: Write MedicationRequest data on the current patient
+
+    patient/MedicationDispense.read: Read MedicationDispense data on the current patient
+    patient/MedicationDispense.write: Write MedicationDispense data on the current patient
+
+    patient/MedicationStatement.read: Read MedicationStatement data on the current patient
+    patient/MedicationStatement.write: Write MedicationStatement data on the current patient
+
+#   Care Provision
+    patient/CareTeam.read: Read CareTeam data on the current patient
+    patient/CareTeam.write: Write CareTeam data on the current patient
+
+    patient/CarePlan.read: Read CarePlan data on the current patient
+    patient/CarePlan.write: Write CarePlan data on the current patient
+
+    patient/Goal.read: Read Goal data on the current patient
+    patient/Goal.write: Write Goal data on the current patient
+
+    patient/ReferralRequest.read: Read ReferralRequest data on the current patient
+    patient/ReferralRequest.write: Write ReferralRequest data on the current patient
+
+    patient/ProcedureRequest.read: Read ProcedureRequest data on the current patient
+    patient/ProcedureRequest.write: Write ProcedureRequest data on the current patient
+
+#   Security and Privacy
+    patient/AuditEvent.read: Read AuditEvent data on the current patient
+    patient/AuditEvent.write: Write AuditEvent data on the current patient
+
+    patient/Consent.read: Read Consent data on the current patient
+    patient/Consent.write: Write Consent data on the current patient
+
+    patient/Provenance.read: Read Provenance data on the current patient
+    patient/Provenance.write: Write Provenance data on the current patient
 
   users:
 #  Configure additional OCP test(users) as:
