@@ -191,12 +191,6 @@ scim:
     patient/Flag.read: Read Flag data on the current patient
     patient/Flag.write: Write Flag data on the current patient
 
-    patient/HealthcareService.read: Read HealthcareService data on the current patient
-    patient/HealthcareService.write: Write HealthcareService data on the current patient
-
-    patient/Location.read: Read Location data on the current patient
-    patient/Location.write: Write Location data on the current patient
-
     patient/Observation.read: Read Observation data on the current patient
     patient/Observation.write: Write Observation data on the current patient
 
@@ -206,20 +200,11 @@ scim:
     patient/Practitioner.read: Read Practitioner data on the current patient
     patient/Practitioner.write: Write Practitioner data on the current patient
 
-    patient/PractitionerRole.read: Read PractitionerRole data on the current patient
-    patient/PractitionerRole.write: Write PractitionerRole data on the current patient
-
     patient/RelatedPerson.read: Read RelatedPerson data on the current patient
     patient/RelatedPerson.write: Write RelatedPerson data on the current patient
 
-    patient/StructureDefinition.read: Read StructureDefinition data on the current patient
-    patient/StructureDefinition.write: Write StructureDefinition data on the current patient
-
     patient/Task.read: Read Task data on the current patient
     patient/Task.write: Write Task data on the current patient
-
-    patient/ValueSet.read: Read ValueSet data on the current patient
-    patient/ValueSet.write: Write ValueSet data on the current patient
 
   users:
 #  Configure additional OCP test(users) as:
