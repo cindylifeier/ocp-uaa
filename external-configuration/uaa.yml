@@ -97,7 +97,8 @@ logout:
   redirect:
     parameter:
       whitelist:
-        - http://localhost:3000
+        - http://localhost:3000/
+        - http://localhost/ocp-ui/
 scim:
   groups:
     ocpUi.access: Access OCP UI
