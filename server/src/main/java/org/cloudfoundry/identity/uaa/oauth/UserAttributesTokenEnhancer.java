@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserAttributesTokenEnhancer implements UaaTokenEnhancer{
+public class UserAttributesTokenEnhancer implements UaaTokenEnhancer {
 
     private UaaUserDatabase userDatabase;
 
@@ -18,11 +18,15 @@ public class UserAttributesTokenEnhancer implements UaaTokenEnhancer{
 
     @Override
     public Map<String, String> getExternalAttributes(OAuth2Authentication authentication) {
-        UaaPrincipal principal= (UaaPrincipal) authentication.getPrincipal();
-        UserInfo userInfo = userDatabase.getUserInfo(principal.getId());
-        if(userInfo!=null && userInfo.getUserAttributes()!=null) {
-            return new HashMap(userInfo.getUserAttributes().toSingleValueMap());
+        final Object principal = authentication.getPrincipal();
+        if (principal != null && principal instanceof UaaPrincipal) {
+            final UaaPrincipal uaaPrincipal = (UaaPrincipal) authentication.getPrincipal();
+            UserInfo userInfo = userDatabase.getUserInfo(uaaPrincipal.getId());
+            if (userInfo != null && userInfo.getUserAttributes() != null) {
+                return new HashMap(userInfo.getUserAttributes().toSingleValueMap());
+            }
+            return new HashMap();
         }
-        return new HashMap();
+        return null;
     }
 }

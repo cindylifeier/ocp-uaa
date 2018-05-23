@@ -32,7 +32,9 @@ import org.cloudfoundry.identity.uaa.oauth.token.TokenConstants;
 import org.cloudfoundry.identity.uaa.user.UaaAuthority;
 import org.cloudfoundry.identity.uaa.user.UaaUser;
 import org.cloudfoundry.identity.uaa.user.UaaUserDatabase;
+import org.cloudfoundry.identity.uaa.user.UserInfo;
 import org.cloudfoundry.identity.uaa.util.JsonUtils;
+import org.cloudfoundry.identity.uaa.util.RestTemplateFactory;
 import org.cloudfoundry.identity.uaa.util.TokenValidation;
 import org.cloudfoundry.identity.uaa.util.UaaTokenUtils;
 import org.cloudfoundry.identity.uaa.zone.ClientServicesExtension;
@@ -73,7 +75,9 @@ import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.util.Assert;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -88,6 +92,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -168,6 +173,26 @@ public class UaaTokenServices implements AuthorizationServerTokenServices, Resou
     private boolean restrictRefreshGrant;
 
     private UaaTokenEnhancer uaaTokenEnhancer = null;
+
+    private RestTemplateFactory restTemplateFactory = null;
+
+    private String smartLaunchContextUri = null;
+
+    public RestTemplateFactory getRestTemplateFactory() {
+        return restTemplateFactory;
+    }
+
+    public void setRestTemplateFactory(RestTemplateFactory restTemplateFactory) {
+        this.restTemplateFactory = restTemplateFactory;
+    }
+
+    public String getSmartLaunchContextUri() {
+        return smartLaunchContextUri;
+    }
+
+    public void setSmartLaunchContextUri(String smartLaunchContextUri) {
+        this.smartLaunchContextUri = smartLaunchContextUri;
+    }
 
     public Set<String> getExcludedClaims() {
         return excludedClaims;
@@ -519,6 +544,19 @@ public class UaaTokenServices implements AuthorizationServerTokenServices, Resou
                 }
 
                 if(scopes.contains(PROFILE) && user != null) {
+                    // SMART on FHIR id_token support for appending FHIR Resource when profile scope is available
+                    final Optional<MultiValueMap<String, String>> userAttributes = Optional.ofNullable(userDatabase.getUserInfo(user.getId()))
+                            .map(UserInfo::getUserAttributes);
+                    final Optional<String> resourceType = userAttributes
+                            .map(map -> map.get("resource"))
+                            .filter(list -> !list.isEmpty())
+                            .map(list -> list.get(0));
+                    final Optional<String> id = userAttributes
+                            .map(map -> map.get("id"))
+                            .filter(list -> !list.isEmpty())
+                            .map(list -> list.get(0));
+                    if(resourceType.isPresent() && id.isPresent()) clone.put(PROFILE, resourceType.get() + "/" + id.get());
+
                     String givenName = user.getGivenName();
                     if(givenName != null) clone.put(GIVEN_NAME, givenName);
 
@@ -610,6 +648,23 @@ public class UaaTokenServices implements AuthorizationServerTokenServices, Resou
             response.remove(excludedClaim);
         }
 
+        // Inject SMART on FHIR context parameters to token if authorization code is derived from a SMART on FHIR launch
+        SmartLaunchRequestParameterHolder.getLaunchFromCodeRequestParam()
+                .ifPresent(launch -> {
+                    final RestTemplate restTemplate = restTemplateFactory.getRestTemplate(false);
+                    final Map<String, Object> launchParams = restTemplate.getForObject(smartLaunchContextUri, Map.class, launch, userId);
+                    launchParams.forEach((k,v) -> {
+                        if(!response.containsKey(k)) {
+                            // Puts SMART launch context into access token
+                            response.put(k, v);
+                            // UAA appends additionalInformation to tokenResponse, so injecting SMART launch context here also puts them in the token response
+                            final Map<String, Object> additionalInformation = token.getAdditionalInformation();
+                            if(additionalInformation != null && !additionalInformation.containsKey(k)){
+                                additionalInformation.put(k, v);
+                            }
+                        }
+                    });
+                });
         return response;
     }
 

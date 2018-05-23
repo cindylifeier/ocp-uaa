@@ -21,7 +21,7 @@ KEY=$1
 awk -F"[{,:}]" '{for(i=1;i<=NF;i++){if($i~/'$KEY'/){print $(i+1)}}}'|tr -d '"'| sed -n 1p
 }
 
-function getScimAdminToken(){	
+function getScimAdminToken(){
 token=$(curl --silent\
         -H "Content-Type:application/x-www-form-urlencoded" \
 		-H "Cache-Control: no-cache" \
@@ -74,17 +74,17 @@ if [ "$totalResults" -eq 0 ]; then
 
 echo -e "Created the new role."
 
-ocpAdminScope=(ocpUi.access ocpUiApi.organization_create ocpUiApi.organization_read ocpUiApi.organization_update ocpUiApi.organization_delete ocpUiApi.patient_create ocpUiApi.patient_read ocpUiApi.patient_update ocpUiApi.patient_delete ocpUiApi.practitioner_create ocpUiApi.practitioner_read ocpUiApi.practitioner_update ocpUiApi.practitioner_delete ocpUiApi.location_create ocpUiApi.location_read ocpUiApi.location_update ocpUiApi.location_delete ocpUiApi.healthcareService_create ocpUiApi.healthcareService_read ocpUiApi.healthcareService_assign ocpUiApi.healthcareService_unassign ocpUiApi.healthcareService_update ocpUiApi.healthcareService_delete ocpUiApi.activityDefinition_create ocpUiApi.activityDefinition_read ocpUiApi.activityDefinition_update ocpUiApi.activityDefinition_delete ocpUiApi.relatedPerson_read)
+ocpAdminScope=(ocpUi.access ocpUiApi.appointment_update ocpUiApi.organization_create ocpUiApi.organization_read ocpUiApi.organization_update ocpUiApi.organization_delete ocpUiApi.patient_create ocpUiApi.patient_read ocpUiApi.patient_update ocpUiApi.patient_delete ocpUiApi.practitioner_create ocpUiApi.practitioner_read ocpUiApi.practitioner_update ocpUiApi.practitioner_delete ocpUiApi.location_create ocpUiApi.location_read ocpUiApi.location_update ocpUiApi.location_delete ocpUiApi.healthcareService_create ocpUiApi.healthcareService_read ocpUiApi.healthcareService_assign ocpUiApi.healthcareService_unassign ocpUiApi.healthcareService_update ocpUiApi.healthcareService_delete ocpUiApi.activityDefinition_create ocpUiApi.activityDefinition_read ocpUiApi.activityDefinition_update ocpUiApi.activityDefinition_delete ocpUiApi.relatedPerson_read)
 
-careCoordinatorScope=(ocpUi.access ocpUiApi.activityDefinition_read ocpUiApi.task_create ocpUiApi.task_read ocpUiApi.task_update ocpUiApi.task_delete ocpUiApi.patient_read ocpUiApi.patient_update ocpUiApi.careTeam_read ocpUiApi.appointment_create ocpUiApi.appointment_read ocpUiApi.appointment_update ocpUiApi.appointment_delete ocpUiApi.consent_create ocpUiApi.consent_read ocpUiApi.consent_update ocpUiApi.consent_delete ocpUiApi.communication_create ocpUiApi.communication_read ocpUiApi.communication_update ocpUiApi.communication_delete ocpUiApi.practitioner_read ocpUiApi.relatedPerson_read)
+careCoordinatorScope=(ocpUi.access ocpUiApi.organization_read ocpUiApi.activityDefinition_read ocpUiApi.task_create ocpUiApi.task_read ocpUiApi.task_update ocpUiApi.task_delete ocpUiApi.patient_read ocpUiApi.patient_update ocpUiApi.careTeam_read ocpUiApi.appointment_create ocpUiApi.appointment_read ocpUiApi.appointment_update ocpUiApi.appointment_delete ocpUiApi.consent_create ocpUiApi.consent_read ocpUiApi.consent_update ocpUiApi.consent_delete ocpUiApi.communication_create ocpUiApi.communication_read ocpUiApi.communication_update ocpUiApi.communication_delete ocpUiApi.practitioner_read ocpUiApi.relatedPerson_read)
 
-careManagerScope=(ocpUi.access ocpUiApi.activityDefinition_read ocpUiApi.task_create ocpUiApi.task_read ocpUiApi.task_update ocpUiApi.task_delete ocpUiApi.patient_create ocpUiApi.patient_read ocpUiApi.patient_update ocpUiApi.patient_delete ocpUiApi.careTeam_create ocpUiApi.careTeam_read ocpUiApi.careTeam_update ocpUiApi.careTeam_delete ocpUiApi.appointment_create ocpUiApi.appointment_read ocpUiApi.appointment_update ocpUiApi.appointment_delete ocpUiApi.consent_create ocpUiApi.consent_read ocpUiApi.consent_update ocpUiApi.consent_delete ocpUiApi.communication_create ocpUiApi.communication_read ocpUiApi.communication_update ocpUiApi.communication_delete ocpUiApi.practitioner_read ocpUiApi.relatedPerson_read)
+careManagerScope=(ocpUi.access ocpUiApi.organization_read ocpUiApi.activityDefinition_read ocpUiApi.task_create ocpUiApi.task_read ocpUiApi.task_update ocpUiApi.task_delete ocpUiApi.patient_create ocpUiApi.patient_read ocpUiApi.patient_update ocpUiApi.patient_delete ocpUiApi.careTeam_create ocpUiApi.careTeam_read ocpUiApi.careTeam_update ocpUiApi.careTeam_delete ocpUiApi.appointment_create ocpUiApi.appointment_read ocpUiApi.appointment_update ocpUiApi.appointment_delete ocpUiApi.consent_create ocpUiApi.consent_read ocpUiApi.consent_update ocpUiApi.consent_delete ocpUiApi.communication_create ocpUiApi.communication_read ocpUiApi.communication_update ocpUiApi.communication_delete ocpUiApi.practitioner_read ocpUiApi.relatedPerson_read)
 
 orgAdminScope=(ocpUi.access ocpUiApi.location_create ocpUiApi.location_read ocpUiApi.location_update ocpUiApi.location_delete ocpUiApi.healthcareService_create ocpUiApi.healthcareService_read ocpUiApi.healthcareService_assign ocpUiApi.healthcareService_unassign ocpUiApi.healthcareService_update ocpUiApi.healthcareService_delete ocpUiApi.patient_create ocpUiApi.patient_read ocpUiApi.patient_update ocpUiApi.patient_delete ocpUiApi.practitioner_create ocpUiApi.practitioner_read ocpUiApi.practitioner_update ocpUiApi.practitioner_delete ocpUiApi.task_read ocpUiApi.appointment_read ocpUiApi.communication_read ocpUiApi.consent_read ocpUiApi.communication_read)
 
-patientScope=(ocpUi.access ocpUiApi.activityDefinition_read ocpUiApi.appointment_read ocpUiApi.appointment_update ocpUiApi.careTeam_read ocpUiApi.careTeam_update ocpUiApi.careTeam_delete ocpUiApi.consent_create ocpUiApi.consent_read ocpUiApi.consent_update ocpUiApi.consent_delete ocpUiApi.relatedPerson_read ocpUiApi.relatedPerson_update ocpUiApi.appointment_read ocpUiApi.appointment_update ocpUiApi.relatedPerson_create ocpUiApi.relatedPerson_read ocpUiApi.relatedPerson_update ocpUiApi.relatedPerson_delete ocpUiApi.task_create ocpUiApi.task_read ocpUiApi.task_update ocpUiApi.task_delete)
+patientScope=(ocpUi.access ocpUiApi.organization_read ocpUiApi.activityDefinition_read ocpUiApi.appointment_read ocpUiApi.appointment_update ocpUiApi.careTeam_read ocpUiApi.careTeam_update ocpUiApi.careTeam_delete ocpUiApi.consent_create ocpUiApi.consent_read ocpUiApi.consent_update ocpUiApi.consent_delete ocpUiApi.relatedPerson_create ocpUiApi.relatedPerson_read ocpUiApi.relatedPerson_update ocpUiApi.relatedPerson_delete ocpUiApi.task_create ocpUiApi.task_read ocpUiApi.task_update ocpUiApi.task_delete)
 
-pcpScope=(ocpUi.access ocpUiApi.activityDefinition_read ocpUiApi.task_create ocpUiApi.task_read ocpUiApi.task_update ocpUiApi.task_delete ocpUiApi.patient_read ocpUiApi.careTeam_read ocpUiApi.appointment_read ocpUiApi.consent_create ocpUiApi.consent_read ocpUiApi.consent_update ocpUiApi.consent_delete ocpUiApi.communication_create ocpUiApi.communication_read ocpUiApi.communication_update ocpUiApi.communication_delete ocpUiApi.practitioner_read ocpUiApi.relatedPerson_read)
+pcpScope=(ocpUi.access ocpUiApi.organization_read  ocpUiApi.activityDefinition_read ocpUiApi.task_create ocpUiApi.task_read ocpUiApi.task_update ocpUiApi.task_delete ocpUiApi.patient_read ocpUiApi.careTeam_read ocpUiApi.appointment_read ocpUiApi.consent_create ocpUiApi.consent_read ocpUiApi.consent_update ocpUiApi.consent_delete ocpUiApi.communication_create ocpUiApi.communication_read ocpUiApi.communication_update ocpUiApi.communication_delete ocpUiApi.practitioner_read ocpUiApi.relatedPerson_read)
 
 benefitsSpecialistScope=(ocpUi.access ocpUiApi.activityDefinition_read ocpUiApi.task_create ocpUiApi.task_read ocpUiApi.task_update ocpUiApi.task_delete ocpUiApi.patient_read ocpUiApi.careTeam_read ocpUiApi.appointment_create ocpUiApi.appointment_read ocpUiApi.appointment_update ocpUiApi.appointment_delete ocpUiApi.consent_create ocpUiApi.consent_read ocpUiApi.consent_update ocpUiApi.consent_delete ocpUiApi.communication_create ocpUiApi.communication_read ocpUiApi.communication_update ocpUiApi.communication_delete ocpUiApi.practitioner_read ocpUiApi.relatedPerson_read)
 
@@ -114,7 +114,7 @@ case "$4" in
 				echo -e "\n Done: $((index+1)) of ${#patientScope[*]}"
 			done
 			break
-			;;			
+			;;
 		3)
 			echo -e "Adding permissions to $1"
 			echo "Number of permissions to be added: ${#careCoordinatorScope[*]}"
@@ -147,7 +147,7 @@ case "$4" in
 				echo -e "\n Done: $((index+1)) of ${#orgAdminScope[*]}"
 			done
 			break
-			;;	
+			;;
 		6)
 			echo -e "Adding permissions to $1"
 			echo "Number of permissions to be added: ${#pcpScope[*]}"
@@ -191,14 +191,14 @@ case "$4" in
 				echo -e "\n Done: $((index+1)) of ${#frontOfficeReceptionistScope[*]}"
 			done
 			break
-			;;	
+			;;
 		*)
-			;;	
+			;;
 		esac
 
 else
    echo "Role already present. Exitting!"
-fi   
+fi
 }
 
 clear
@@ -229,7 +229,7 @@ while [ choice != '' ]
 			echo -e "The new role created will be: ${role}"
 			createRoleAndAddScopes "${role}" "${description}" "${bearerToken}" "${choice}"
 			break
-			;;	
+			;;
 		3)
 			echo -e "You have chosen to create a Case Manager / Care Coordinator"
 			role="ocp.role.careCoordinator";
@@ -296,8 +296,8 @@ while [ choice != '' ]
 		*)
 			echo -e "Unable to read your choice!"
 			showOptions;
-			;;	
+			;;
 		esac
 fi
 done
-	
+

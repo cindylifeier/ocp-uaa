@@ -511,6 +511,8 @@
         <property name="tokenProvisioning" ref="revocableTokenProvisioning"/>
         <property name="restrictRefreshGrant" value="${jwt.token.refresh.restrict_grant:false}"/>
         <property name="uaaTokenEnhancer" ref="userAttributesTokenEnhancer"/>
+        <property name="restTemplateFactory" ref="restTemplateFactory"/>
+        <property name="smartLaunchContextUri" value="${smart.launch-context-uri}"/>
     </bean>
 
     <bean id="excludedClaims" class="java.util.LinkedHashSet">
