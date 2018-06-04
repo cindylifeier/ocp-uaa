@@ -121,9 +121,6 @@ bearerToken="bearer $token"
 #echo $bearerToken
 showInformation
 
-echo -n "Please enter existing role which will launch Smart on Fhir app (eg: ocp.role.ocpAdmin) : "
-read existingRole
-
 echo -e "Step 1 of 2: Create role and assign smart scope"
 echo -e "The smart role created will be: ${SMART_ROLE_NAME}"
 createRoleAndAddScopes "${SMART_ROLE_NAME}" "${SMART_ROLE_DESCRIPTION}" "${bearerToken}"

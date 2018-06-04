@@ -87,7 +87,7 @@ echo -e "Created the new role."
 
 echo -e "Adding permissions to $1"
 echo "Number of permissions to be added: ${#ocpSmartAdminScope[*]}"
-for index in ${!ocpSmartScope[*]}
+for index in ${!ocpSmartAdminScope[*]}
 	do
 		groupId=`getGroupId "${ocpSmartAdminScope[$index]}" "${bearerToken}"`
 #		echo -e $groupId
@@ -118,8 +118,6 @@ bearerToken="bearer $token"
 #echo $bearerToken
 showInformation
 
-echo -n "Please enter existing role which will launch Smart on Fhir app (eg: ocp.role.ocpAdmin) : "
-read existingRole
 
 echo -e "Step 1 of 2: Create role and assign smart scope"
 echo -e "The smart role created will be: ${SMART_ROLE_NAME}"
