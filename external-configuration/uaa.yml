@@ -79,7 +79,7 @@ oauth:
     ocp-ui:
       authorized-grant-types: password
       secret: changeit
-      scope: ocpUi.access,ocpUiApi.*,ocp.role.organization.*.*,ocp.role.*
+      scope: ocpUi.access,ocpUiApi.*,ocp.role.organization.*.*,ocp.role.*,ocpSmart.*
       authorities: uaa.resource
     admin-client:
       authorized-grant-types: password
