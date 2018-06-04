@@ -89,7 +89,7 @@ oauth:
     smart-core:
       authorized-grant-types: client_credentials
       secret: changeit
-      scope: uaa.none
+      scope: launch/*,patient/*.read,patient/*.write,patient/*.*,launch,launch/patient,launch/location,launch/organization,launch/encounter,launch/resource,patient/Patient.read,patient/Patient.write,patient/RelatedPerson.read,patient/RelatedPerson.write,patient/EpisodeOfCare.read,patient/EpisodeOfCare.write,patient/Coverage.read,patient/Coverage.write,patient/Communication.read,patient/Communication.write,patient/Flag.read,patient/Flag.write,patient/ActivityDefinition.read,patient/ActivityDefinition.write,patient/Task.read,patient/Task.write,patient/Appointment.read,patient/Appointment.write,patient/AllergyIntolerence.read,patient/AllergyIntolerence.write,patient/Condition.read,patient/Condition.write,patient/Procedure.read,patient/Procedure.write,patient/ClinicalImpression.read,patient/ClinicalImpression.write,patient/Observation.read,patient/Observation.write,patient/Specimen.read,patient/Specimen.write,patient/DiagnosticReport.read,patient/DiagnosticReport.write,patient/Medication.read,patient/Medication.write,patient/MedicationRequest.read,patient/MedicationRequest.write,patient/MedicationDispense.read,patient/MedicationDispense.write,patient/MedicationStatement.read,patient/MedicationStatement.write,patient/CareTeam.read,patient/CareTeam.write,patient/CarePlan.read,patient/CarePlan.write,patient/Goal.read,patient/Goal.write,patient/ReferralRequest.read,patient/ReferralRequest.write,patient/ProcedureRequest.read,patient/ProcedureRequest.write,patient/AuditEvent.read,patient/AuditEvent.write,patient/Consent.read,patient/Consent.write,,patient/Provenance.read,patient/Provenance.write
       authorities: clients.read,clients.write
 smart:
   launch-context-uri: http://localhost:8445/launch/{launch}?user={user}
@@ -164,6 +164,12 @@ scim:
     ocpUiApi.task_create: Create a Task FHIR Resource
     ocpUiApi.task_update: Update a Task FHIR Resource
     ocpUiApi.task_delete: Delete Task FHIR Resource
+
+    #OCP SMART-GATEWAY Scopes
+    ocpSmart.client_read: Read SMART On FHIR app
+    ocpSmart.client_create: Create SMART On FHIR app
+    ocpSmart.client_update: Update SMART On FHIR app
+    ocpSmart.client_delete: Delete SMART On FHIR app
 
     # SMART on FHIR - FHIR launch scopes which are utilized by SMART on FHIR App
     launch: The current selections in OCP system (e.g., organization, patient...etc.)
