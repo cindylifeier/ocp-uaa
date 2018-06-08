@@ -79,7 +79,7 @@ oauth:
     ocp-ui:
       authorized-grant-types: password
       secret: changeit
-      scope: ocpUi.access,ocpUiApi.*,ocp.role.organization.*.*,ocp.role.*
+      scope: ocpUi.access,ocpUiApi.*,ocp.role.organization.*.*,ocp.role.*,ocpSmart.*
       authorities: uaa.resource
     admin-client:
       authorized-grant-types: password
@@ -90,7 +90,7 @@ oauth:
       authorized-grant-types: client_credentials
       secret: changeit
       scope: uaa.none
-      authorities: clients.read,clients.write
+      authorities: clients.admin
 smart:
   launch-context-uri: http://localhost:8445/launch/{launch}?user={user}
 logout:
@@ -164,6 +164,12 @@ scim:
     ocpUiApi.task_create: Create a Task FHIR Resource
     ocpUiApi.task_update: Update a Task FHIR Resource
     ocpUiApi.task_delete: Delete Task FHIR Resource
+
+    #OCP SMART-GATEWAY Scopes
+    ocpSmart.client_read: Read SMART On FHIR app
+    ocpSmart.client_create: Create SMART On FHIR app
+    ocpSmart.client_update: Update SMART On FHIR app
+    ocpSmart.client_delete: Delete SMART On FHIR app
 
     # SMART on FHIR - FHIR launch scopes which are utilized by SMART on FHIR App
     launch: The current selections in OCP system (e.g., organization, patient...etc.)
