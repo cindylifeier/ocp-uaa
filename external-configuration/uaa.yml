@@ -85,7 +85,7 @@ oauth:
       authorized-grant-types: client_credentials
       secret: changeit
       scope: uaa.none,
-      authorities: user/*.*,patient/Patient.*
+      authorities: user/*.*,patient/Patient.*,$expand
     admin-client:
       authorized-grant-types: password
       secret: changeit
