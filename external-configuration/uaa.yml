@@ -96,6 +96,11 @@ oauth:
       secret: changeit
       scope: uaa.none
       authorities: clients.admin
+    ocp-ui-api:
+      authorized-grant-types: client_credentials
+      secret: changeit
+      scope: uaa.none
+      authorities: scim.write,scim.read
 smart:
   launch-context-uri: http://localhost:8445/launch/{launch}?user={user}
 logout:
