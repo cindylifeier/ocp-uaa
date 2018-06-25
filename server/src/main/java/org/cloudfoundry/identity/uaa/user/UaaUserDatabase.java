@@ -14,6 +14,8 @@ package org.cloudfoundry.identity.uaa.user;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.List;
+
 /**
  * Interface for loading user data for the UAA.
  */
@@ -25,6 +27,8 @@ public interface UaaUserDatabase {
     UaaUser retrieveUserByEmail(String email, String origin) throws UsernameNotFoundException;
 
     UserInfo getUserInfo(String id);
+
+    List<UserInfoDto> getUserInfos();
 
     UserInfo storeUserInfo(String id, UserInfo info);
 

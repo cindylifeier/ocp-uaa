@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.cloudfoundry.identity.uaa.account;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cloudfoundry.identity.uaa.authentication.UaaPrincipal;
 import org.cloudfoundry.identity.uaa.user.UaaUser;
 import org.cloudfoundry.identity.uaa.user.UaaUserDatabase;
@@ -45,6 +47,7 @@ public class UserInfoEndpoint implements InitializingBean {
 
     public static final String UAA_ADMIN = "uaa.admin";
     public static final String USER_ID_KEY = "user_id";
+    private static Log logger = LogFactory.getLog(UserInfoEndpoint.class);
 
     private UaaUserDatabase userDatabase;
 
@@ -65,6 +68,12 @@ public class UserInfoEndpoint implements InitializingBean {
         boolean addCustomAttributes = OAuth2ExpressionUtils.hasAnyScope(authentication, new String[] {USER_ATTRIBUTES});
         boolean addRoles = OAuth2ExpressionUtils.hasAnyScope(authentication, new String[] {ROLES});
         return getResponse(uaaPrincipal, addCustomAttributes, addRoles);
+    }
+
+    @RequestMapping(value = "/userinfos")
+    @ResponseBody
+    public Object getAllUserInfos(Principal principal) {
+        return userDatabase.getUserInfos();
     }
 
     protected UaaPrincipal extractUaaPrincipal(OAuth2Authentication authentication) {

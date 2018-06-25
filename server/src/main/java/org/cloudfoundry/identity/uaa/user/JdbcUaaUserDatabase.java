@@ -20,6 +20,7 @@ import org.cloudfoundry.identity.uaa.util.TimeService;
 import org.cloudfoundry.identity.uaa.zone.IdentityZoneHolder;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.GrantedAuthority;
@@ -132,6 +133,26 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
             return jdbcTemplate.queryForObject("select user_id, info from user_info where user_id = ?", userInfoMapper, id);
         } catch (EmptyResultDataAccessException e) {
             logger.debug("No custom attributes stored for user:"+id);
+            return null;
+        }
+    }
+
+    public List<UserInfoDto> getUserInfos() {
+        try {
+            List<UserInfoDto> userInfos = jdbcTemplate.query("select user_id, info from user_info", new RowMapper() {
+                public UserInfoDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    String id = rs.getString(1);
+                    String info = rs.getString(2);
+                    UserInfoDto userInfoDto = new UserInfoDto();
+                    userInfoDto.setUserId(id);
+                    userInfoDto.setInfo(info);
+                    return userInfoDto;
+                }
+            }, null);
+
+            return userInfos;
+        } catch (EmptyResultDataAccessException e) {
+            logger.debug("No userInfo available");
             return null;
         }
     }
