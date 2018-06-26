@@ -15,10 +15,15 @@ package org.cloudfoundry.identity.uaa.scim;
 import org.cloudfoundry.identity.uaa.resources.Queryable;
 import org.cloudfoundry.identity.uaa.resources.ResourceManager;
 
+import java.sql.SQLException;
+import java.util.List;
+
 public interface ScimGroupProvisioning extends ResourceManager<ScimGroup>, Queryable<ScimGroup> {
     String GROUP_BY_NAME_FILTER = "displayName eq \"%s\"";
 
     ScimGroup createOrGet(ScimGroup group, String zoneId);
 
     ScimGroup getByName(String displayName, String zoneId);
+
+    void createScopes(List<String> scopes, String groupId) throws SQLException;
 }

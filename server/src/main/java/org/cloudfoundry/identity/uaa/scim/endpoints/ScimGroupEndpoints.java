@@ -58,6 +58,7 @@ import org.springframework.web.servlet.View;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -365,6 +366,27 @@ public class ScimGroupEndpoints {
             }
         }
         created.setMembers(membershipManager.getMembers(created.getId(), false, IdentityZoneHolder.get().getId()));
+        addETagHeader(httpServletResponse, created);
+        return created;
+    }
+
+    @RequestMapping(value = { "/Groups/ocp" }, method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public ScimGroup createOcpGroup(@RequestBody ScimGroup group, HttpServletResponse httpServletResponse) {
+        group.setZoneId(IdentityZoneHolder.get().getId());
+        ScimGroup created = dao.create(group, IdentityZoneHolder.get().getId());
+        if (group.getScopes() != null) {
+            for (String scope : group.getScopes()) {
+                try {
+                    dao.createScopes(group.getScopes(), created.getId());
+                } catch (Exception ex) {
+                    logger.warn("Attempt to add invalid scope");
+                    dao.delete(created.getId(), created.getVersion(), IdentityZoneHolder.get().getId());
+                    throw new InvalidScimResourceException("Invalid scope: " + scope);
+                }
+            }
+        }
         addETagHeader(httpServletResponse, created);
         return created;
     }
