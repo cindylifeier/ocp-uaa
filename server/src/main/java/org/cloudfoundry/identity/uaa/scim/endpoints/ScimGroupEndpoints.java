@@ -58,7 +58,6 @@ import org.springframework.web.servlet.View;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -427,6 +426,15 @@ public class ScimGroupEndpoints {
             dao.update(groupId, existing, IdentityZoneHolder.get().getId());
             throw new ScimException(ex.getMessage(), ex, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @RequestMapping(value = {"/Groups/ocp/{groupId}"}, method = RequestMethod.PUT)
+    @ResponseBody
+    public ScimGroup updateOcpGroup(@PathVariable String groupId, @RequestBody ScimGroup group) {
+        //TODO: Implement the logic
+        logger.info("groupId to be updated: " + groupId);
+        logger.info("group: " + group.getDisplayName());
+        return null;
     }
 
     @RequestMapping(value = { "/Groups/{groupId}" }, method = RequestMethod.PATCH)
