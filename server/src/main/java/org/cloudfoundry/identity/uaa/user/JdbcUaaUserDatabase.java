@@ -63,7 +63,7 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
     public static final String DEFAULT_USER_BY_ID_QUERY = "select " + USER_FIELDS + "from users where id = ? and active=? and identity_zone_id=?";
 
     //public static final String USERS_BY_ORGANIZATION_ID_QUERY = "select users.id, users.givenname, users.familyname, groups.displayName, groups.description, user_info.info from users inner join group_membership on users.id = group_membership.member_id inner join groups on groups.id = group_membership.group_id inner join user_info on users.id = user_info.user_id and user_info.info ilike '%orgId\":[\"?\"]%'";
-    public static final String USERS_BY_ORGANIZATION_ID_QUERY = "select users.id, users.givenname, users.familyname, groups.displayName, groups.description, user_info.info from users inner join group_membership on users.id = group_membership.member_id inner join groups on groups.id = group_membership.group_id inner join user_info on users.id = user_info.user_id and user_info.info ilike '%23%'";
+    public static final String USERS_BY_ORGANIZATION_ID_QUERY = "select users.id, users.givenname, users.familyname, groups.displayName, groups.description, user_info.info from users inner join group_membership on users.id = group_membership.member_id inner join groups on groups.id = group_membership.group_id inner join user_info on users.id = user_info.user_id and user_info.info ilike ?";
 
     private final TimeService timeService;
 
@@ -141,6 +141,7 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
     }
 
     public List<UserDto> getUsersByOrganizationId(String organizationId) {
+        String searchString = "%orgId\":[\""+organizationId+"\"]%";
         try {
             List<UserDto> userInfos = jdbcTemplate.query(USERS_BY_ORGANIZATION_ID_QUERY, new RowMapper() {
                 public UserDto mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -153,7 +154,7 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
 
                     return new UserDto(id, givenName, familyName, displayName, description, info);
                 }
-            }, null);
+            }, searchString);
 
             return userInfos;
         } catch (EmptyResultDataAccessException e) {
