@@ -20,7 +20,6 @@ import org.cloudfoundry.identity.uaa.util.TimeService;
 import org.cloudfoundry.identity.uaa.zone.IdentityZoneHolder;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.GrantedAuthority;
@@ -62,6 +61,10 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
     public static final String DEFAULT_UPDATE_USER_LAST_LOGON = "update users set previous_logon_success_time = last_logon_success_time, last_logon_success_time = ? where id = ? and identity_zone_id=?";
 
     public static final String DEFAULT_USER_BY_ID_QUERY = "select " + USER_FIELDS + "from users where id = ? and active=? and identity_zone_id=?";
+
+    //public static final String USERS_BY_ORGANIZATION_ID_QUERY = "select users.id, users.givenname, users.familyname, groups.displayName, groups.description, user_info.info from users inner join group_membership on users.id = group_membership.member_id inner join groups on groups.id = group_membership.group_id inner join user_info on users.id = user_info.user_id and user_info.info ilike '%orgId\":[\"?\"]%'";
+    public static final String USERS_BY_ORGANIZATION_ID_QUERY = "select users.id, users.givenname, users.familyname, groups.displayName, groups.description, user_info.info from users inner join group_membership on users.id = group_membership.member_id inner join groups on groups.id = group_membership.group_id inner join user_info on users.id = user_info.user_id and user_info.info ilike '%23%'";
+
     private final TimeService timeService;
 
     private JdbcTemplate jdbcTemplate;
@@ -137,16 +140,18 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
         }
     }
 
-    public List<UserInfoDto> getUserInfos() {
+    public List<UserDto> getUsersByOrganizationId(String organizationId) {
         try {
-            List<UserInfoDto> userInfos = jdbcTemplate.query("select user_id, info from user_info", new RowMapper() {
-                public UserInfoDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+            List<UserDto> userInfos = jdbcTemplate.query(USERS_BY_ORGANIZATION_ID_QUERY, new RowMapper() {
+                public UserDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                     String id = rs.getString(1);
-                    String info = rs.getString(2);
-                    UserInfoDto userInfoDto = new UserInfoDto();
-                    userInfoDto.setUserId(id);
-                    userInfoDto.setInfo(info);
-                    return userInfoDto;
+                    String givenName = rs.getString(2);
+                    String familyName = rs.getString(3);
+                    String displayName = rs.getString(4);
+                    String description = rs.getString(5);
+                    String info = rs.getString(6);
+
+                    return new UserDto(id, givenName, familyName, displayName, description, info);
                 }
             }, null);
 
