@@ -15,6 +15,7 @@ package org.cloudfoundry.identity.uaa.scim.endpoints;
 import com.jayway.jsonpath.JsonPathException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cloudfoundry.identity.uaa.account.RoleToUserDto;
 import org.cloudfoundry.identity.uaa.resources.AttributeNameMapper;
 import org.cloudfoundry.identity.uaa.resources.SearchResults;
 import org.cloudfoundry.identity.uaa.resources.SearchResultsFactory;
@@ -58,6 +59,7 @@ import org.springframework.web.servlet.View;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -378,7 +380,7 @@ public class ScimGroupEndpoints {
         if (group.getScopes() != null) {
 
             try {
-                dao.createScopes(group.getScopes(), created.getId());
+                dao.createScopesOrRoles(group.getScopes(), created.getId(), "GROUP");
             } catch (Exception ex) {
                 logger.warn("Attempt to add invalid scope");
                 dao.delete(created.getId(), created.getVersion(), IdentityZoneHolder.get().getId());
@@ -388,6 +390,17 @@ public class ScimGroupEndpoints {
         }
         addETagHeader(httpServletResponse, created);
         return created;
+    }
+
+    @RequestMapping(value = "/assign-role-to-user", method = RequestMethod.POST )
+    @ResponseStatus(HttpStatus.OK)
+    public void assignRoleToUser(@Valid @RequestBody RoleToUserDto roleToUserDto) {
+        logger.info("data : " + roleToUserDto.getGroupId() + " : " + roleToUserDto.getUserId());
+        try {
+            dao.createScopesOrRoles(Arrays.asList(roleToUserDto.getGroupId()), roleToUserDto.getUserId(), "USER");
+        } catch (Exception ex) {
+            throw new InvalidScimResourceException("Invalid role to assign to a user");
+        }
     }
 
     @RequestMapping(value = { "/Groups/{groupId}" }, method = RequestMethod.PUT)

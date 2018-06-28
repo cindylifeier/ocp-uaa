@@ -36,6 +36,15 @@
         <csrf disabled="true"/>
     </http>
 
+    <http name="assignRoleToUserSecurity" pattern="/assign-role-to-user" create-session="stateless" authentication-manager-ref="emptyAuthenticationManager"
+          entry-point-ref="oauthAuthenticationEntryPoint" access-decision-manager-ref="accessDecisionManager"  use-expressions="false"
+          xmlns="http://www.springframework.org/schema/security">
+        <intercept-url pattern="/**" access="scope=openid" />
+        <custom-filter ref="openidResourceAuthenticationFilter" position="PRE_AUTH_FILTER" />
+        <access-denied-handler ref="oauthAccessDeniedHandler" />
+        <csrf disabled="true"/>
+    </http>
+
     <oauth:resource-server id="openidResourceAuthenticationFilter" token-services-ref="tokenServices"
         resource-id="openid" entry-point-ref="oauthAuthenticationEntryPoint" />
 

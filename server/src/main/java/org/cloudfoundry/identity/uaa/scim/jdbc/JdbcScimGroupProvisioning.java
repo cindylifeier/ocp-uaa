@@ -342,15 +342,15 @@ public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
     }
 
     @Override
-    public void createScopes(List<String> scopes, String groupId) throws SQLException {
+    public void createScopesOrRoles(List<String> scopes, String groupId, String memberType) throws SQLException {
         scopes.stream().forEach(scope -> {
             jdbcTemplate.update(ADD_OCP_SCOPE_SQL, new PreparedStatementSetter() {
                 @Override
                 public void setValues(PreparedStatement ps) throws SQLException {
                     int pos = 1;
-                    ps.setString(pos++, scope);
-                    ps.setString(pos++, groupId);
-                    ps.setString(pos++, GROUP);
+                    ps.setString(pos++, scope); //group_id = scopes or roles
+                    ps.setString(pos++, groupId); //member_id = groupId or userId
+                    ps.setString(pos++, memberType); //member_type = GROUP or USER
                     ps.setString(pos++, null);
                     ps.setTimestamp(pos++, new Timestamp(new Date().getTime()));
                     ps.setString(pos++, UAA);

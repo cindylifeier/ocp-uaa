@@ -25,5 +25,5 @@ public interface ScimGroupProvisioning extends ResourceManager<ScimGroup>, Query
 
     ScimGroup getByName(String displayName, String zoneId);
 
-    void createScopes(List<String> scopes, String groupId) throws SQLException;
+    void createScopesOrRoles(List<String> scopes, String groupId, String memberType) throws SQLException;
 }
