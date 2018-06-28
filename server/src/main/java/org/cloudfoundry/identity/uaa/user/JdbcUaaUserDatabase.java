@@ -15,6 +15,8 @@ package org.cloudfoundry.identity.uaa.user;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cloudfoundry.identity.uaa.account.RoleToUserDto;
+import org.cloudfoundry.identity.uaa.scim.jdbc.JdbcScimGroupProvisioning;
 import org.cloudfoundry.identity.uaa.util.JsonUtils;
 import org.cloudfoundry.identity.uaa.util.TimeService;
 import org.cloudfoundry.identity.uaa.zone.IdentityZoneHolder;
@@ -62,8 +64,8 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
 
     public static final String DEFAULT_USER_BY_ID_QUERY = "select " + USER_FIELDS + "from users where id = ? and active=? and identity_zone_id=?";
 
-    //public static final String USERS_BY_ORGANIZATION_ID_QUERY = "select users.id, users.givenname, users.familyname, groups.displayName, groups.description, user_info.info from users inner join group_membership on users.id = group_membership.member_id inner join groups on groups.id = group_membership.group_id inner join user_info on users.id = user_info.user_id and user_info.info ilike '%orgId\":[\"?\"]%'";
     public static final String USERS_BY_ORGANIZATION_ID_QUERY = "select users.id, users.givenname, users.familyname, groups.displayName, groups.description, user_info.info from users inner join group_membership on users.id = group_membership.member_id inner join groups on groups.id = group_membership.group_id inner join user_info on users.id = user_info.user_id and user_info.info ilike ?";
+
 
     private final TimeService timeService;
 
@@ -143,17 +145,15 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
     public List<UserDto> getUsersByOrganizationId(String organizationId) {
         String searchString = "%orgId\":[\""+organizationId+"\"]%";
         try {
-            List<UserDto> userInfos = jdbcTemplate.query(USERS_BY_ORGANIZATION_ID_QUERY, new RowMapper() {
-                public UserDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    String id = rs.getString(1);
-                    String givenName = rs.getString(2);
-                    String familyName = rs.getString(3);
-                    String displayName = rs.getString(4);
-                    String description = rs.getString(5);
-                    String info = rs.getString(6);
+            List<UserDto> userInfos = jdbcTemplate.query(USERS_BY_ORGANIZATION_ID_QUERY, (rs, rowNum) -> {
+                String id = rs.getString(1);
+                String givenName = rs.getString(2);
+                String familyName = rs.getString(3);
+                String displayName = rs.getString(4);
+                String description = rs.getString(5);
+                String info = rs.getString(6);
 
-                    return new UserDto(id, givenName, familyName, displayName, description, info);
-                }
+                return new UserDto(id, givenName, familyName, displayName, description, info);
             }, searchString);
 
             return userInfos;
