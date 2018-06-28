@@ -376,15 +376,15 @@ public class ScimGroupEndpoints {
         group.setZoneId(IdentityZoneHolder.get().getId());
         ScimGroup created = dao.create(group, IdentityZoneHolder.get().getId());
         if (group.getScopes() != null) {
-            for (String scope : group.getScopes()) {
-                try {
-                    dao.createScopes(group.getScopes(), created.getId());
-                } catch (Exception ex) {
-                    logger.warn("Attempt to add invalid scope");
-                    dao.delete(created.getId(), created.getVersion(), IdentityZoneHolder.get().getId());
-                    throw new InvalidScimResourceException("Invalid scope: " + scope);
-                }
+
+            try {
+                dao.createScopes(group.getScopes(), created.getId());
+            } catch (Exception ex) {
+                logger.warn("Attempt to add invalid scope");
+                dao.delete(created.getId(), created.getVersion(), IdentityZoneHolder.get().getId());
+                throw new InvalidScimResourceException("Invalid scope. ");
             }
+
         }
         addETagHeader(httpServletResponse, created);
         return created;
