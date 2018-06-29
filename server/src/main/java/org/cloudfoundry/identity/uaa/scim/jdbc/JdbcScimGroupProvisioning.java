@@ -91,8 +91,7 @@ public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
     public static final String OCP_GET_GROUP_SQL = "select groups.id, groups.displayName, groups.description, group_membership.group_id from groups, group_membership " +
             "where groups.id = group_membership.member_id and groups.displayName ilike '%ocp.role%' and groups.displayName not like '%ocpAdmin%' and groups.displayName not like '%smartUser%' and groups.displayName not like '%smartAdmin%'";
 
-    public static final String OCP_GET_SCOPE_SQL = "select groups.id, groups.displayName, groups.description, group_membership.group_id from groups, group_membership " +
-            "where groups.id = group_membership.group_id and groups.displayName ilike '%ocpUiApi%' or groups.displayName like '%smartUser%'";
+    public static final String OCP_GET_SCOPE_SQL = "select id,displayName,description from groups where displayName ilike '%ocpUiApi%' or displayName ilike '%smartUser%'";
 
     public static final String GET_GROUP_BY_NAME_SQL = String.format(
         "select %s from %s where displayName=? and identity_zone_id=?",
@@ -369,15 +368,7 @@ public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
 
     @Override
     public List<GroupOrScopeDto> getOcpGroups() {
-        return getGroupsOrScopes(OCP_GET_GROUP_SQL);
-    }
-
-    public List<GroupOrScopeDto> getOcpScopes() {
-        return getGroupsOrScopes(OCP_GET_SCOPE_SQL);
-    }
-
-    private List<GroupOrScopeDto> getGroupsOrScopes(final String sql) {
-        return jdbcTemplate.query(sql, new RowMapper<GroupOrScopeDto>() {
+        return jdbcTemplate.query(OCP_GET_GROUP_SQL, new RowMapper<GroupOrScopeDto>() {
             @Override
             public GroupOrScopeDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 int pos = 1;
@@ -386,6 +377,20 @@ public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
                 String description = rs.getString(pos++);
                 String scopeId = rs.getString(pos++);
                 return new GroupOrScopeDto(id, displayName, description, scopeId);
+            }
+        });
+    }
+
+    @Override
+    public List<GroupOrScopeDto> getOcpScopes() {
+        return jdbcTemplate.query(OCP_GET_SCOPE_SQL, new RowMapper<GroupOrScopeDto>() {
+            @Override
+            public GroupOrScopeDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                int pos = 1;
+                String id = rs.getString(pos++);
+                String displayName = rs.getString(pos++);
+                String description = rs.getString(pos++);
+                return new GroupOrScopeDto(id, displayName, description, null);
             }
         });
     }
