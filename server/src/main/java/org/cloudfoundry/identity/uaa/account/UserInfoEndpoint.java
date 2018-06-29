@@ -75,8 +75,8 @@ public class UserInfoEndpoint implements InitializingBean {
 
     @RequestMapping(value = "/userinfos")
     @ResponseBody
-    public Object getUsersByOrganizationId(@RequestParam(required = true, value = "organizationId") String organizationId, Principal principal) {
-        return userDatabase.getUsersByOrganizationId(organizationId);
+    public Object getUsersByOrganizationId(@RequestParam(required = true, value = "organizationId") String organizationId, @RequestParam(value = "resource", required = true) String resource) {
+        return userDatabase.getUsersByOrganizationId(organizationId, resource);
     }
 
     protected UaaPrincipal extractUaaPrincipal(OAuth2Authentication authentication) {

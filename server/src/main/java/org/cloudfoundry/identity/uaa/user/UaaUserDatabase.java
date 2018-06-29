@@ -28,7 +28,7 @@ public interface UaaUserDatabase {
 
     UserInfo getUserInfo(String id);
 
-    List<UserDto> getUsersByOrganizationId(String organizationId);
+    List<UserDto> getUsersByOrganizationId(String organizationId, String resource);
 
     UserInfo storeUserInfo(String id, UserInfo info);
 

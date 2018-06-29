@@ -103,7 +103,7 @@ public class InMemoryUaaUserDatabase implements UaaUserDatabase {
         this.users.clear();
     }
 
-    public List<UserDto> getUsersByOrganizationId(String organizationId) {
+    public List<UserDto> getUsersByOrganizationId(String organizationId, String resource) {
         //Not implemented for InMemory db
         return null;
     }

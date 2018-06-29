@@ -64,7 +64,8 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
 
     public static final String DEFAULT_USER_BY_ID_QUERY = "select " + USER_FIELDS + "from users where id = ? and active=? and identity_zone_id=?";
 
-    public static final String USERS_BY_ORGANIZATION_ID_QUERY = "select users.id, users.givenname, users.familyname, groups.displayName, groups.description, user_info.info from users inner join group_membership on users.id = group_membership.member_id inner join groups on groups.id = group_membership.group_id inner join user_info on users.id = user_info.user_id and user_info.info ilike ?";
+    public static final String USERS_BY_ORGANIZATION_ID_QUERY = "select users.id, users.givenname, users.familyname, groups.displayName, groups.description, user_info.info from users " +
+            "inner join group_membership on users.id = group_membership.member_id inner join groups on groups.id = group_membership.group_id inner join user_info on users.id = user_info.user_id and user_info.info ilike ? and user_info.info ilike ?";
 
 
     private final TimeService timeService;
@@ -142,8 +143,9 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
         }
     }
 
-    public List<UserDto> getUsersByOrganizationId(String organizationId) {
-        String searchString = "%orgId\":[\""+organizationId+"\"]%";
+    public List<UserDto> getUsersByOrganizationId(String organizationId, String resource) {
+        String searchString = "%orgId\":[\"" + organizationId + "\"]%";
+        String resourceString = "%\"resource\":[\"" + resource + "\"]%";
         try {
             List<UserDto> userInfos = jdbcTemplate.query(USERS_BY_ORGANIZATION_ID_QUERY, (rs, rowNum) -> {
                 String id = rs.getString(1);
@@ -154,7 +156,7 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
                 String info = rs.getString(6);
 
                 return new UserDto(id, givenName, familyName, displayName, description, info);
-            }, searchString);
+            }, searchString, resourceString);
 
             return userInfos;
         } catch (EmptyResultDataAccessException e) {
