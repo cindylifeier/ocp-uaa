@@ -14,6 +14,7 @@ package org.cloudfoundry.identity.uaa.scim;
 
 import org.cloudfoundry.identity.uaa.resources.Queryable;
 import org.cloudfoundry.identity.uaa.resources.ResourceManager;
+import org.cloudfoundry.identity.uaa.scim.endpoints.GroupOrScopeDto;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -26,4 +27,8 @@ public interface ScimGroupProvisioning extends ResourceManager<ScimGroup>, Query
     ScimGroup getByName(String displayName, String zoneId);
 
     void createScopesOrRoles(List<String> scopes, String groupId, String memberType) throws SQLException;
+
+    List<GroupOrScopeDto> getOcpGroups();
+
+    List<GroupOrScopeDto> getOcpScopes();
 }

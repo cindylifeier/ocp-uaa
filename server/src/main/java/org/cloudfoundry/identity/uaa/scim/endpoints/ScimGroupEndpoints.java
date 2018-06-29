@@ -183,6 +183,18 @@ public class ScimGroupEndpoints {
         }
     }
 
+    @RequestMapping(value = { "/Groups/ocp-groups" }, method = RequestMethod.GET)
+    @ResponseBody
+    public List<GroupOrScopeDto> getOcpGroups() {
+        return dao.getOcpGroups();
+    }
+
+    @RequestMapping(value = { "/Groups/ocp-scopes" }, method = RequestMethod.GET)
+    @ResponseBody
+    public List<GroupOrScopeDto> getOcpScopes() {
+        return dao.getOcpScopes();
+    }
+
     @RequestMapping(value = { "/Groups/External/list" }, method = RequestMethod.GET)
     @ResponseBody
     @Deprecated

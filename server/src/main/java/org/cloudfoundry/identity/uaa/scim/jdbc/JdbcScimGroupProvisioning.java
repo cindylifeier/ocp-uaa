@@ -22,8 +22,8 @@ import org.cloudfoundry.identity.uaa.resources.jdbc.JdbcPagingListFactory;
 import org.cloudfoundry.identity.uaa.resources.jdbc.SimpleSearchQueryConverter;
 import org.cloudfoundry.identity.uaa.scim.ScimGroup;
 import org.cloudfoundry.identity.uaa.scim.ScimGroupProvisioning;
+import org.cloudfoundry.identity.uaa.scim.endpoints.GroupOrScopeDto;
 import org.cloudfoundry.identity.uaa.scim.exception.InvalidScimResourceException;
-import org.cloudfoundry.identity.uaa.scim.exception.ScimException;
 import org.cloudfoundry.identity.uaa.scim.exception.ScimResourceAlreadyExistsException;
 import org.cloudfoundry.identity.uaa.scim.exception.ScimResourceConstraintFailedException;
 import org.cloudfoundry.identity.uaa.scim.exception.ScimResourceNotFoundException;
@@ -38,6 +38,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.Assert;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -86,6 +87,12 @@ public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
         GROUP_FIELDS,
         GROUP_TABLE
     );
+
+    public static final String OCP_GET_GROUP_SQL = "select groups.id, groups.displayName, groups.description, group_membership.group_id from groups, group_membership " +
+            "where groups.id = group_membership.member_id and groups.displayName ilike '%ocp.role%' and groups.displayName not like '%ocpAdmin%' and groups.displayName not like '%smartUser%' and groups.displayName not like '%smartAdmin%'";
+
+    public static final String OCP_GET_SCOPE_SQL = "select groups.id, groups.displayName, groups.description, group_membership.group_id from groups, group_membership " +
+            "where groups.id = group_membership.group_id and groups.displayName ilike '%ocpUiApi%' or groups.displayName like '%smartUser%'";
 
     public static final String GET_GROUP_BY_NAME_SQL = String.format(
         "select %s from %s where displayName=? and identity_zone_id=?",
@@ -357,6 +364,29 @@ public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
                     ps.setString(pos++, UAA);
                 }
             });
+        });
+    }
+
+    @Override
+    public List<GroupOrScopeDto> getOcpGroups() {
+        return getGroupsOrScopes(OCP_GET_GROUP_SQL);
+    }
+
+    public List<GroupOrScopeDto> getOcpScopes() {
+        return getGroupsOrScopes(OCP_GET_SCOPE_SQL);
+    }
+
+    private List<GroupOrScopeDto> getGroupsOrScopes(final String sql) {
+        return jdbcTemplate.query(sql, new RowMapper<GroupOrScopeDto>() {
+            @Override
+            public GroupOrScopeDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                int pos = 1;
+                String id = rs.getString(pos++);
+                String displayName = rs.getString(pos++);
+                String description = rs.getString(pos++);
+                String scopeId = rs.getString(pos++);
+                return new GroupOrScopeDto(id, displayName, description, scopeId);
+            }
         });
     }
 
