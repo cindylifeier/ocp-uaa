@@ -664,6 +664,8 @@ public class UaaTokenServices implements AuthorizationServerTokenServices, Resou
                             }
                         }
                     });
+                    // Delete the launch
+                    restTemplate.delete(smartLaunchContextUri, launch, userId);
                 });
         return response;
     }
