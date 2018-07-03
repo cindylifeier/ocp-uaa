@@ -159,6 +159,11 @@ public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
         GROUP_MEMBERSHIP_FIELDS
     );
 
+    public static final String DELETE_OCP_SCOPE_SQL = String.format(
+        "delete from %s where member_id = ? and member_type = 'USER'",
+        GROUP_MEMBERSHIP_TABLE
+    );
+
     private final RowMapper<ScimGroup> rowMapper = new ScimGroupRowMapper();
 
     public JdbcScimGroupProvisioning(JdbcTemplate jdbcTemplate, JdbcPagingListFactory pagingListFactory) {
@@ -349,6 +354,9 @@ public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
 
     @Override
     public void createScopesOrRoles(List<String> scopes, String groupId, String memberType) throws SQLException {
+
+        jdbcTemplate.update(DELETE_OCP_SCOPE_SQL, groupId);
+
         scopes.stream().forEach(scope -> {
             jdbcTemplate.update(ADD_OCP_SCOPE_SQL, new PreparedStatementSetter() {
                 @Override
