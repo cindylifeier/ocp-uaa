@@ -123,7 +123,7 @@ echo -e "Step 1 of 2: Create role and assign smart scope"
 echo -e "The smart role created will be: ${SMART_ROLE_NAME}"
 createRoleAndAddScopes "${SMART_ROLE_NAME}" "${SMART_ROLE_DESCRIPTION}" "${bearerToken}"
 
-echo -e "Step 2 of 2: Assign smartUser to existing ocp role"
+echo -e "Step 2 of 2: Assign smartAdmin to existing ocp role"
 assignSmartRoleToExistingRole
 
 echo -e "DONE"

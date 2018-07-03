@@ -57,7 +57,7 @@ response=$(curl --silent \
 			-H "Authorization: $bearerToken" \
 			-H "Cache-Control: no-cache" \
 			-H "Content-Type: application/json" \
-			POST --data '{"origin" : "uaa", "type" : "GROUP", "value" : "'"$roleId"'"}' "http://localhost:8080/uaa/Groups/$groupId/members")
+			POST --data '{"origin" : "uaa", "type" : "GROUP", "value" : "'"$roleId"'"}' "$UAA_BASE_URL/Groups/$groupId/members")
 echo $response
 }
 
