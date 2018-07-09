@@ -175,6 +175,16 @@ scim:
     ocpUiApi.task_update: Update a Task FHIR Resource
     ocpUiApi.task_delete: Delete Task FHIR Resource
 
+    ocpUiApi.group_read: Read a UAA group
+    ocpUiApi.group_create: Create a UAA group
+    ocpUiApi.group_update: Update a UAA group
+    ocpUiApi.group_delete: Delete a UAA group
+
+    ocpUiApi.user_read: Read a UAA user
+    ocpUiApi.user_create: Create a UAA user
+    ocpUiApi.user_update: Update a UAA user
+    ocpUiApi.user_delete: Delete a UAA user
+
     #OCP SMART-GATEWAY Scopes
     ocpSmart.client_read: Read SMART On FHIR app
     ocpSmart.client_create: Create SMART On FHIR app
