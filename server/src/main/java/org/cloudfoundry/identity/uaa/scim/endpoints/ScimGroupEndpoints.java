@@ -15,6 +15,7 @@ package org.cloudfoundry.identity.uaa.scim.endpoints;
 import com.jayway.jsonpath.JsonPathException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cloudfoundry.identity.uaa.account.RoleToUserDto;
 import org.cloudfoundry.identity.uaa.resources.AttributeNameMapper;
 import org.cloudfoundry.identity.uaa.resources.SearchResults;
 import org.cloudfoundry.identity.uaa.resources.SearchResultsFactory;
@@ -58,6 +59,7 @@ import org.springframework.web.servlet.View;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -179,6 +181,18 @@ public class ScimGroupEndpoints {
         } catch (JsonPathException e) {
             throw new ScimException("Invalid attributes: [" + attributesCommaSeparated + "]", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @RequestMapping(value = { "/Groups/ocp-groups" }, method = RequestMethod.GET)
+    @ResponseBody
+    public List<GroupOrScopeDto> getOcpGroups() {
+        return dao.getOcpGroups();
+    }
+
+    @RequestMapping(value = { "/Groups/ocp-scopes" }, method = RequestMethod.GET)
+    @ResponseBody
+    public List<GroupOrScopeDto> getOcpScopes() {
+        return dao.getOcpScopes();
     }
 
     @RequestMapping(value = { "/Groups/External/list" }, method = RequestMethod.GET)
@@ -369,6 +383,38 @@ public class ScimGroupEndpoints {
         return created;
     }
 
+    @RequestMapping(value = { "/Groups/ocp" }, method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public ScimGroup createOcpGroup(@RequestBody ScimGroup group, HttpServletResponse httpServletResponse) {
+        group.setZoneId(IdentityZoneHolder.get().getId());
+        ScimGroup created = dao.create(group, IdentityZoneHolder.get().getId());
+        if (group.getScopes() != null) {
+
+            try {
+                dao.createScopesOrRoles(group.getScopes(), created.getId(), "GROUP");
+            } catch (Exception ex) {
+                logger.warn("Attempt to add invalid scope");
+                dao.delete(created.getId(), created.getVersion(), IdentityZoneHolder.get().getId());
+                throw new InvalidScimResourceException("Invalid scope. ");
+            }
+
+        }
+        addETagHeader(httpServletResponse, created);
+        return created;
+    }
+
+    @RequestMapping(value = "/assign-role-to-user", method = RequestMethod.POST )
+    @ResponseStatus(HttpStatus.OK)
+    public void assignRoleToUser(@Valid @RequestBody RoleToUserDto roleToUserDto) {
+        logger.info("data : " + roleToUserDto.getGroupId() + " : " + roleToUserDto.getUserId());
+        try {
+            dao.createScopesOrRoles(Arrays.asList(roleToUserDto.getGroupId()), roleToUserDto.getUserId(), "USER");
+        } catch (Exception ex) {
+            throw new InvalidScimResourceException("Invalid role to assign to a user");
+        }
+    }
+
     @RequestMapping(value = { "/Groups/{groupId}" }, method = RequestMethod.PUT)
     @ResponseBody
     public ScimGroup updateGroup(@RequestBody ScimGroup group, @PathVariable String groupId,
@@ -405,6 +451,15 @@ public class ScimGroupEndpoints {
             dao.update(groupId, existing, IdentityZoneHolder.get().getId());
             throw new ScimException(ex.getMessage(), ex, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @RequestMapping(value = {"/Groups/ocp/{groupId}"}, method = RequestMethod.PUT)
+    @ResponseBody
+    public ScimGroup updateOcpGroup(@PathVariable String groupId, @RequestBody ScimGroup group) {
+        //TODO: Implement the logic
+        logger.info("groupId to be updated: " + groupId);
+        logger.info("group: " + group.getDisplayName());
+        return null;
     }
 
     @RequestMapping(value = { "/Groups/{groupId}" }, method = RequestMethod.PATCH)

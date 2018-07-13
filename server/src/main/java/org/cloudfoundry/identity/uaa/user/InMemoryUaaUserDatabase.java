@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -100,6 +101,11 @@ public class InMemoryUaaUserDatabase implements UaaUserDatabase {
     public void clear() {
         this.ids.clear();
         this.users.clear();
+    }
+
+    public List<UserDto> getUsersByOrganizationId(String organizationId, String resource) {
+        //Not implemented for InMemory db
+        return null;
     }
 
 }

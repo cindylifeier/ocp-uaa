@@ -32,6 +32,7 @@ public class ScimGroup extends ScimCore<ScimGroup> {
     private String description;
 
     private List<ScimGroupMember> members;
+    private List<String> scopes;
 
     public String getDisplayName() {
         return displayName;
@@ -58,6 +59,14 @@ public class ScimGroup extends ScimCore<ScimGroup> {
     public ScimGroup setMembers(List<ScimGroupMember> members) {
         this.members = members;
         return this;
+    }
+
+    public List<String> getScopes() {
+        return scopes;
+    }
+
+    public void setScopes(List<String> scopes) {
+        this.scopes = scopes;
     }
 
     public String getDescription() {

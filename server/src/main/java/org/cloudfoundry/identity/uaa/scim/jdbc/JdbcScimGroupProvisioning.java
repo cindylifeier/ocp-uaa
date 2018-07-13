@@ -22,6 +22,7 @@ import org.cloudfoundry.identity.uaa.resources.jdbc.JdbcPagingListFactory;
 import org.cloudfoundry.identity.uaa.resources.jdbc.SimpleSearchQueryConverter;
 import org.cloudfoundry.identity.uaa.scim.ScimGroup;
 import org.cloudfoundry.identity.uaa.scim.ScimGroupProvisioning;
+import org.cloudfoundry.identity.uaa.scim.endpoints.GroupOrScopeDto;
 import org.cloudfoundry.identity.uaa.scim.exception.InvalidScimResourceException;
 import org.cloudfoundry.identity.uaa.scim.exception.ScimResourceAlreadyExistsException;
 import org.cloudfoundry.identity.uaa.scim.exception.ScimResourceConstraintFailedException;
@@ -37,6 +38,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.Assert;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -49,6 +51,8 @@ import static org.springframework.util.StringUtils.hasText;
 public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
     implements ScimGroupProvisioning, SystemDeletable {
 
+    public static final String GROUP = "GROUP";
+    public static final String UAA = "uaa";
     private JdbcScimGroupExternalMembershipManager externalGroupMappingManager;
     private JdbcTemplate jdbcTemplate;
     private JdbcScimGroupMembershipManager membershipManager;
@@ -61,6 +65,7 @@ public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
     }
 
     public static final String GROUP_FIELDS = "id,displayName,description,created,lastModified,version,identity_zone_id";
+    public static final String GROUP_MEMBERSHIP_FIELDS="group_id,member_id,member_type,authorities,added,origin,identity_zone_id";
 
     public static final String GROUP_TABLE = "groups";
     public static final String GROUP_MEMBERSHIP_TABLE = "group_membership";
@@ -82,6 +87,11 @@ public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
         GROUP_FIELDS,
         GROUP_TABLE
     );
+
+    public static final String OCP_GET_GROUP_SQL = "select groups.id, groups.displayName, groups.description, group_membership.group_id from groups, group_membership " +
+            "where groups.id = group_membership.member_id and groups.displayName ilike '%ocp.role%' and groups.displayName not like '%ocpAdmin%' and groups.displayName not like '%smartUser%' and groups.displayName not like '%smartAdmin%'";
+
+    public static final String OCP_GET_SCOPE_SQL = "select id,displayName,description from groups where displayName ilike '%ocpUiApi%' or displayName ilike '%smartUser%'";
 
     public static final String GET_GROUP_BY_NAME_SQL = String.format(
         "select %s from %s where displayName=? and identity_zone_id=?",
@@ -140,6 +150,17 @@ public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
 
     public static final String DELETE_MEMBER_SQL = String.format(
         "delete from %s where member_id=? and member_id in (select id from users where id=? and identity_zone_id=?)",
+        GROUP_MEMBERSHIP_TABLE
+    );
+
+    public static final String ADD_OCP_SCOPE_SQL = String.format(
+        "insert into %s ( %s ) values (?, ?, ?, ?, ?, ?, ?)",
+        GROUP_MEMBERSHIP_TABLE,
+        GROUP_MEMBERSHIP_FIELDS
+    );
+
+    public static final String DELETE_OCP_SCOPE_SQL = String.format(
+        "delete from %s where member_id = ? and member_type = 'USER'",
         GROUP_MEMBERSHIP_TABLE
     );
 
@@ -329,6 +350,57 @@ public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
     @Override
     protected void validateOrderBy(String orderBy) throws IllegalArgumentException {
         super.validateOrderBy(orderBy, GROUP_FIELDS);
+    }
+
+    @Override
+    public void createScopesOrRoles(List<String> scopes, String groupId, String memberType) throws SQLException {
+
+        jdbcTemplate.update(DELETE_OCP_SCOPE_SQL, groupId);
+
+        scopes.stream().forEach(scope -> {
+            jdbcTemplate.update(ADD_OCP_SCOPE_SQL, new PreparedStatementSetter() {
+                @Override
+                public void setValues(PreparedStatement ps) throws SQLException {
+                    int pos = 1;
+                    ps.setString(pos++, scope); //group_id = scopes or roles
+                    ps.setString(pos++, groupId); //member_id = groupId or userId
+                    ps.setString(pos++, memberType); //member_type = GROUP or USER
+                    ps.setString(pos++, null);
+                    ps.setTimestamp(pos++, new Timestamp(new Date().getTime()));
+                    ps.setString(pos++, UAA);
+                    ps.setString(pos++, UAA);
+                }
+            });
+        });
+    }
+
+    @Override
+    public List<GroupOrScopeDto> getOcpGroups() {
+        return jdbcTemplate.query(OCP_GET_GROUP_SQL, new RowMapper<GroupOrScopeDto>() {
+            @Override
+            public GroupOrScopeDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                int pos = 1;
+                String id = rs.getString(pos++);
+                String displayName = rs.getString(pos++);
+                String description = rs.getString(pos++);
+                String scopeId = rs.getString(pos++);
+                return new GroupOrScopeDto(id, displayName, description, scopeId);
+            }
+        });
+    }
+
+    @Override
+    public List<GroupOrScopeDto> getOcpScopes() {
+        return jdbcTemplate.query(OCP_GET_SCOPE_SQL, new RowMapper<GroupOrScopeDto>() {
+            @Override
+            public GroupOrScopeDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                int pos = 1;
+                String id = rs.getString(pos++);
+                String displayName = rs.getString(pos++);
+                String description = rs.getString(pos++);
+                return new GroupOrScopeDto(id, displayName, description, null);
+            }
+        });
     }
 
 }

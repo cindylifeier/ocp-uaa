@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.cloudfoundry.identity.uaa.account;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cloudfoundry.identity.uaa.authentication.UaaPrincipal;
 import org.cloudfoundry.identity.uaa.user.UaaUser;
 import org.cloudfoundry.identity.uaa.user.UaaUserDatabase;
@@ -23,12 +25,15 @@ import org.springframework.security.oauth2.provider.expression.OAuth2ExpressionU
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 import static org.cloudfoundry.identity.uaa.oauth.token.ClaimConstants.ROLES;
@@ -45,6 +50,7 @@ public class UserInfoEndpoint implements InitializingBean {
 
     public static final String UAA_ADMIN = "uaa.admin";
     public static final String USER_ID_KEY = "user_id";
+    private static Log logger = LogFactory.getLog(UserInfoEndpoint.class);
 
     private UaaUserDatabase userDatabase;
 
@@ -65,6 +71,12 @@ public class UserInfoEndpoint implements InitializingBean {
         boolean addCustomAttributes = OAuth2ExpressionUtils.hasAnyScope(authentication, new String[] {USER_ATTRIBUTES});
         boolean addRoles = OAuth2ExpressionUtils.hasAnyScope(authentication, new String[] {ROLES});
         return getResponse(uaaPrincipal, addCustomAttributes, addRoles);
+    }
+
+    @RequestMapping(value = "/userinfos")
+    @ResponseBody
+    public Object getUsersByOrganizationId(@RequestParam(required = true, value = "organizationId") String organizationId, @RequestParam(value = "resource", required = true) String resource) {
+        return userDatabase.getUsersByOrganizationId(organizationId, resource);
     }
 
     protected UaaPrincipal extractUaaPrincipal(OAuth2Authentication authentication) {
