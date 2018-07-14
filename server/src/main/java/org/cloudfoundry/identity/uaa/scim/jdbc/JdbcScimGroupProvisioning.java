@@ -353,9 +353,15 @@ public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
     }
 
     @Override
+    public void deleteScopes(String groupId) {
+        jdbcTemplate.update(DELETE_OCP_SCOPE_SQL, groupId);
+    }
+
+    @Override
     public void createScopesOrRoles(List<String> scopes, String groupId, String memberType) throws SQLException {
 
         jdbcTemplate.update(DELETE_OCP_SCOPE_SQL, groupId);
+        jdbcTemplate.update("delete from group_membership where member_id = ? and member_type = 'GROUP'", groupId);
 
         scopes.stream().forEach(scope -> {
             jdbcTemplate.update(ADD_OCP_SCOPE_SQL, new PreparedStatementSetter() {

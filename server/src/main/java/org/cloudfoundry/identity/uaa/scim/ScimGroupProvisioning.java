@@ -31,4 +31,6 @@ public interface ScimGroupProvisioning extends ResourceManager<ScimGroup>, Query
     List<GroupOrScopeDto> getOcpGroups();
 
     List<GroupOrScopeDto> getOcpScopes();
+
+    void deleteScopes(String groupId);
 }
