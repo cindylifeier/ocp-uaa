@@ -387,21 +387,16 @@ public class ScimGroupEndpoints {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public ScimGroup createOcpGroup(@RequestBody ScimGroup group, HttpServletResponse httpServletResponse) {
-        group.setZoneId(IdentityZoneHolder.get().getId());
-        ScimGroup created = dao.create(group, IdentityZoneHolder.get().getId());
-        if (group.getScopes() != null) {
+        try {
+            group.setZoneId(IdentityZoneHolder.get().getId());
+            ScimGroup created = dao.create(group, IdentityZoneHolder.get().getId());
 
-            try {
-                dao.createScopesOrRoles(group.getScopes(), created.getId(), "GROUP");
-            } catch (Exception ex) {
-                logger.warn("Attempt to add invalid scope");
-                dao.delete(created.getId(), created.getVersion(), IdentityZoneHolder.get().getId());
-                throw new InvalidScimResourceException("Invalid scope. ");
-            }
-
+        createOrUpdateScopes(group, created);
+            addETagHeader(httpServletResponse, created);
+            return created;
+        } catch (Exception e) {
+            throw new InvalidScimResourceException("Unable to update a group");
         }
-        addETagHeader(httpServletResponse, created);
-        return created;
     }
 
     @RequestMapping(value = "/assign-role-to-user", method = RequestMethod.POST )
@@ -455,11 +450,44 @@ public class ScimGroupEndpoints {
 
     @RequestMapping(value = {"/Groups/ocp/{groupId}"}, method = RequestMethod.PUT)
     @ResponseBody
-    public ScimGroup updateOcpGroup(@PathVariable String groupId, @RequestBody ScimGroup group) {
-        //TODO: Implement the logic
+    public ScimGroup updateOcpGroup(@PathVariable String groupId, @RequestBody ScimGroup group, HttpServletResponse httpServletResponse) {
         logger.info("groupId to be updated: " + groupId);
         logger.info("group: " + group.getDisplayName());
-        return null;
+        int version = getVersion(groupId, "*");
+        group.setVersion(version);
+        try {
+            group.setZoneId(IdentityZoneHolder.get().getId());
+            ScimGroup updated = dao.update(groupId, group, IdentityZoneHolder.get().getId());
+
+            createOrUpdateScopes(group, updated);
+            addETagHeader(httpServletResponse, updated);
+            return updated;
+        } catch (Exception e) {
+            //throw new InvalidScimResourceException("Unable to update a group");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void createOrUpdateScopes(ScimGroup group, ScimGroup updated) {
+        if (group.getScopes() != null) {
+
+            try {
+                if(group.getScopes() != null && group.getScopes().size() > 0) {
+                    dao.createScopesOrRoles(group.getScopes(), updated.getId(), "GROUP");
+                    
+                } else {
+                    dao.deleteScopes(updated.getId());
+                }
+
+                dao.deleteScopes(updated.getId());
+            } catch (Exception ex) {
+                logger.warn("Attempt to add invalid scope");
+                dao.delete(updated.getId(), updated.getVersion(), IdentityZoneHolder.get().getId());
+                throw new InvalidScimResourceException("Invalid scope. ");
+            }
+
+        }
     }
 
     @RequestMapping(value = { "/Groups/{groupId}" }, method = RequestMethod.PATCH)
