@@ -91,7 +91,7 @@ public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
     public static final String OCP_GET_GROUP_SQL = "select groups.id, groups.displayName, groups.description, group_membership.group_id from groups, group_membership " +
             "where groups.id = group_membership.member_id and groups.displayName ilike '%ocp.role%' and groups.displayName not like '%ocpAdmin%' and groups.displayName not like '%smartUser%' and groups.displayName not like '%smartAdmin%'";
 
-    public static final String OCP_GET_SCOPE_SQL = "select id,displayName,description from groups where displayName ilike '%ocpUiApi%' or displayName ilike '%smartUser%'";
+    public static final String OCP_GET_SCOPE_SQL = "select id,displayName,description from groups where displayName ilike '%ocpUiApi%' or displayName ilike '%smartUser%' or displayName ilike '%ocpUi.access%'";
 
     public static final String GET_GROUP_BY_NAME_SQL = String.format(
         "select %s from %s where displayName=? and identity_zone_id=?",
