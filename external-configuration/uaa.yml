@@ -191,6 +191,11 @@ scim:
     ocpSmart.client_update: Update SMART On FHIR app
     ocpSmart.client_delete: Delete SMART On FHIR app
 
+    #Quippe scopes to launch Quippe Smart On Fhir app
+    Quippe: Quippe
+    QuippeClinician: Quippe Clinician
+    QuippeLibraryManager: Quippe Library Manager
+
     # SMART on FHIR - FHIR launch scopes which are utilized by SMART on FHIR App
     launch: The current selections in OCP system (e.g., organization, patient...etc.)
     launch/patient: The current patient selection
