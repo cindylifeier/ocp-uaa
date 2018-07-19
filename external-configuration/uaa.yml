@@ -191,6 +191,9 @@ scim:
     ocpSmart.client_update: Update SMART On FHIR app
     ocpSmart.client_delete: Delete SMART On FHIR app
 
+    # SMART on FHIR misc scopes
+    $expand: Read ValueSet expansion data you have access to in the system
+
     # SMART on FHIR - FHIR launch scopes which are utilized by SMART on FHIR App
     launch: The current selections in OCP system (e.g., organization, patient...etc.)
     launch/patient: The current patient selection
