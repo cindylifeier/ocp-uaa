@@ -102,29 +102,29 @@ echo $response
 
 clear
 echo "This script is used to CREATE a user in UAA with fhir resource as userinfo"
-echo -n "Please enter firstName : "
+echo -e "Please enter firstName : "
 read firstName
 
-echo -n "Please enter lastName : "
+echo -e "Please enter lastName : "
 read lastName
 
-echo -n "Please enter username : "
+echo -e "Please enter username : "
 read username
 
-echo -n "Please enter password : "
+echo -e "Please enter password : "
 read password
 
-echo -n "Please enter EMAIL : "
+echo -e "Please enter EMAIL : "
 read email
 
-echo -n "Please enter role scope : "
+echo -e "Please enter role scope : "
 read scope
 
 echo -e "Select fhir resource type from following: "
 echo -e "  1 Practitioner"
 echo -e "  2 Patient"
 echo -e "  3 NONE"
-echo -n "Enter fhir resource type: "
+echo -e "Enter fhir resource type: "
 read resourceTypeChoice
 
 if [ "$resourceTypeChoice" -eq 1 ]
@@ -136,9 +136,9 @@ fi
 
 if [ "$resourceTypeChoice" -eq 1 ] || [ "$resourceTypeChoice" -eq 2 ]
 then
-	echo -n "Please enter the Org ID to which this user belong to : "
+	echo -e "Please enter the Org ID to which this user belong to : "
 	read orgId
-	echo -n "Please choose fhir resource id: "
+	echo -e "Please choose fhir resource id: "
 	read resourceId
 fi
 
