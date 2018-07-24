@@ -156,7 +156,15 @@ if [ "$resourceTypeChoice" -eq 1 ] || [ "$resourceTypeChoice" -eq 2 ]
 then
 createUserinfo
 elif [ "$resourceTypeChoice" -eq 3 ]
-then echo -e "Skip...  None fhir resource "
+then
+    echo -e "None fhir resource (ocpAdmin) "
+    #ocpAdmin is not related to any organization or fhir resource
+    #this is added just to indicate that it is an ocpAdmin when checked from ocp-ui-api
+    #see UserContextServiceImpl.getUserResourceType()
+    orgId=0
+    resourceId=0
+    $resourceType="ocpAdmin"
+    createUserinfo
 fi
 
 echo -e "${red}Step 4 of 4: Assign role scope to user...${reset}"
