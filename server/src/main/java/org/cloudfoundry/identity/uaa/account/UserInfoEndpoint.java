@@ -25,7 +25,6 @@ import org.springframework.security.oauth2.provider.expression.OAuth2ExpressionU
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.validation.Valid;
 import java.security.Principal;
 
 import static org.cloudfoundry.identity.uaa.oauth.token.ClaimConstants.ROLES;
@@ -49,6 +47,7 @@ import static org.cloudfoundry.identity.uaa.oauth.token.ClaimConstants.USER_ATTR
 public class UserInfoEndpoint implements InitializingBean {
 
     public static final String UAA_ADMIN = "uaa.admin";
+    public static final String SCIM_WRITE = "scim.write";
     public static final String USER_ID_KEY = "user_id";
     private static Log logger = LogFactory.getLog(UserInfoEndpoint.class);
 
@@ -113,8 +112,12 @@ public class UserInfoEndpoint implements InitializingBean {
     @ResponseStatus(HttpStatus.OK)
     public void loginInfo(@RequestBody LinkedMultiValueMap<String, String> userAttributes, Principal principal) {
         OAuth2Authentication authentication = (OAuth2Authentication) principal;
-        UaaPrincipal uaaPrincipal = extractUaaPrincipal(authentication);
-        boolean addCustomAttributes = OAuth2ExpressionUtils.hasAnyScope(authentication, new String[] {UAA_ADMIN});
+        if(authentication.getUserAuthentication()!=null) {
+            UaaPrincipal uaaPrincipal = extractUaaPrincipal(authentication);
+        }
+        boolean addCustomAttributes = OAuth2ExpressionUtils.hasAnyScope(authentication, new String[]{UAA_ADMIN,SCIM_WRITE});
+        if(addCustomAttributes==false)
+            throw new IllegalStateException("Permission not enough to create userinfo");
         String userId=userAttributes.getFirst(USER_ID_KEY);
         userAttributes.remove(USER_ID_KEY);
         userDatabase.storeUserInfo(userId, new UserInfo().setUserAttributes(userAttributes));
