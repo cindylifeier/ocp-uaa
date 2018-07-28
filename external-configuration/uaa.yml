@@ -74,7 +74,6 @@ database:
   url: jdbc:postgresql:uaa
   username: postgres
   password: ${UAA_DB_PASSWORD:admin}
-
 uaa:
   url: http://localhost:8080/uaa
   token:
@@ -88,7 +87,7 @@ oauth:
     ocp-ui:
       authorized-grant-types: password
       secret: changeit
-      scope: ocpUi.access,ocpUiApi.*,ocp.role.organization.*.*,ocp.role.*,ocpSmart.*
+      scope: ocpUi.access,ocpUiApi.*,ocp.role.organization.*.*,ocp.role.*,ocpSmart.*,password.write
       authorities: uaa.resource
     ocp-fis:
       authorized-grant-types: client_credentials
@@ -204,6 +203,9 @@ scim:
     Quippe: Quippe
     QuippeClinician: Quippe Clinician
     QuippeLibraryManager: Quippe Library Manager
+
+    # SMART on FHIR misc scopes
+    $expand: Read ValueSet expansion data you have access to in the system
 
     # SMART on FHIR - FHIR launch scopes which are utilized by SMART on FHIR App
     launch: The current selections in OCP system (e.g., organization, patient...etc.)

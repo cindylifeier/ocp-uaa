@@ -98,6 +98,7 @@ import java.util.UUID;
 
 import static java.util.Collections.emptySet;
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toSet;
 import static org.cloudfoundry.identity.uaa.oauth.client.ClientConstants.REQUIRED_USER_GROUPS;
 import static org.cloudfoundry.identity.uaa.oauth.token.ClaimConstants.ACR;
 import static org.cloudfoundry.identity.uaa.oauth.token.ClaimConstants.ADDITIONAL_AZ_ATTR;
@@ -151,6 +152,11 @@ public class UaaTokenServices implements AuthorizationServerTokenServices, Resou
                 InitializingBean, ApplicationEventPublisherAware {
 
     public static final String UAA_REFRESH_TOKEN = "uaa.offline_token";
+
+    // SMART on FHIR constants
+    public static final String LAUNCH_CONTEXT_SCOPE_PREFIX = "launch/";
+    public static final String USER_LAUNCH_CONTEXT_KEY = "user";
+
     private final Log logger = LogFactory.getLog(getClass());
 
     private UaaUserDatabase userDatabase = null;
@@ -653,17 +659,22 @@ public class UaaTokenServices implements AuthorizationServerTokenServices, Resou
                 .ifPresent(launch -> {
                     final RestTemplate restTemplate = restTemplateFactory.getRestTemplate(false);
                     final Map<String, Object> launchParams = restTemplate.getForObject(smartLaunchContextUri, Map.class, launch, userId);
-                    launchParams.forEach((k,v) -> {
-                        if(!response.containsKey(k)) {
-                            // Puts SMART launch context into access token
-                            response.put(k, v);
-                            // UAA appends additionalInformation to tokenResponse, so injecting SMART launch context here also puts them in the token response
-                            final Map<String, Object> additionalInformation = token.getAdditionalInformation();
-                            if(additionalInformation != null && !additionalInformation.containsKey(k)){
-                                additionalInformation.put(k, v);
-                            }
-                        }
-                    });
+                    final Set<String> requestedLaunchScopes = requestedScopes.stream().filter(scope -> scope.startsWith(LAUNCH_CONTEXT_SCOPE_PREFIX)).collect(toSet());
+                    launchParams.entrySet().stream()
+                            .filter(entry -> requestedLaunchScopes.contains(LAUNCH_CONTEXT_SCOPE_PREFIX + entry.getKey()) || USER_LAUNCH_CONTEXT_KEY.equals(entry.getKey()))
+                            .forEach(entry -> {
+                                final String k = entry.getKey();
+                                final Object v = entry.getValue();
+                                if (!response.containsKey(k)) {
+                                    // Puts SMART launch context into access token
+                                    response.put(k, v);
+                                    // UAA appends additionalInformation to tokenResponse, so injecting SMART launch context here also puts them in the token response
+                                    final Map<String, Object> additionalInformation = token.getAdditionalInformation();
+                                    if (additionalInformation != null && !additionalInformation.containsKey(k)) {
+                                        additionalInformation.put(k, v);
+                                    }
+                                }
+                            });
                     // Delete the launch
                     restTemplate.delete(smartLaunchContextUri, launch, userId);
                 });
