@@ -41,6 +41,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -397,7 +398,7 @@ public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
 
     @Override
     public List<GroupOrScopeDto> getOcpScopes() {
-        return jdbcTemplate.query(OCP_GET_SCOPE_SQL, new RowMapper<GroupOrScopeDto>() {
+        List<GroupOrScopeDto> ocpScopes = jdbcTemplate.query(OCP_GET_SCOPE_SQL, new RowMapper<GroupOrScopeDto>() {
             @Override
             public GroupOrScopeDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 int pos = 1;
@@ -407,6 +408,8 @@ public class JdbcScimGroupProvisioning extends AbstractQueryable<ScimGroup>
                 return new GroupOrScopeDto(id, displayName, description, null);
             }
         });
+        ocpScopes.sort(Comparator.comparing(GroupOrScopeDto::getDisplayName));
+        return ocpScopes;
     }
 
 }
