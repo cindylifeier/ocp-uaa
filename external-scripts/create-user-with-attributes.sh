@@ -163,7 +163,7 @@ then
     #see UserContextServiceImpl.getUserResourceType()
     orgId=0
     resourceId=0
-    $resourceType="ocpAdmin"
+    resourceType="ocpAdmin"
     createUserinfo
 fi
 
