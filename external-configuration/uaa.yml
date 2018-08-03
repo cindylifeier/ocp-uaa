@@ -108,7 +108,7 @@ oauth:
       authorized-grant-types: client_credentials
       secret: changeit
       scope: uaa.none
-      authorities: scim.write,scim.read,openid
+      authorities: scim.write,scim.read,openid,password.write
 smart:
   launch-context-uri: http://localhost:8445/launch/{launch}?user={user}
 logout:
