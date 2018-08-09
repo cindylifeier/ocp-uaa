@@ -33,4 +33,6 @@ public interface UaaUserDatabase {
     UserInfo storeUserInfo(String id, UserInfo info);
 
     void updateLastLogonTime(String id);
+
+    Object retrievePractitionersByOrganizationAndRole(String organizationId, String uaaRole);
 }

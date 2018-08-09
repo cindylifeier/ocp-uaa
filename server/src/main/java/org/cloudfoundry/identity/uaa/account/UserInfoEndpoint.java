@@ -123,5 +123,11 @@ public class UserInfoEndpoint implements InitializingBean {
         userDatabase.storeUserInfo(userId, new UserInfo().setUserAttributes(userAttributes));
 
     }
+
+    @RequestMapping(value = "/practitionerByOrganizationAndRole")
+    @ResponseBody
+    public Object retrievePractitionersByOrganizationAndRole(@RequestParam(required = true, value = "organization") String organizationId, @RequestParam(required = true, value = "role") String uaaRole) {
+        return userDatabase.retrievePractitionersByOrganizationAndRole(organizationId, uaaRole);
+    }
 }
 

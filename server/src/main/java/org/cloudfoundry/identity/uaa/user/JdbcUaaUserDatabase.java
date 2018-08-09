@@ -12,9 +12,11 @@
  *******************************************************************************/
 package org.cloudfoundry.identity.uaa.user;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cloudfoundry.identity.uaa.account.ocp.dto.Info;
 import org.cloudfoundry.identity.uaa.util.JsonUtils;
 import org.cloudfoundry.identity.uaa.util.TimeService;
 import org.cloudfoundry.identity.uaa.zone.IdentityZoneHolder;
@@ -28,6 +30,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -65,6 +68,7 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
     public static final String USERS_BY_ORGANIZATION_ID_QUERY = "select users.id, users.givenname, users.familyname, groups.displayName, groups.description, user_info.info from users " +
             "left join group_membership on users.id = group_membership.member_id left join groups on groups.id = group_membership.group_id inner join user_info on users.id = user_info.user_id and user_info.info ilike ? and user_info.info ilike ?";
 
+    public static final String USERS_BY_ORGANIZATION_ROLE_QUERY = "select info from group_membership, user_info, groups where info ilike ? and user_info.user_id = group_membership.member_id and groups.id = group_membership.group_id and displayName ilike ?;";
 
     private final TimeService timeService;
 
@@ -161,6 +165,23 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
             logger.debug("No userInfo available");
             return null;
         }
+    }
+
+    public Object retrievePractitionersByOrganizationAndRole(String organizationId, String role) {
+        String organizationParam = "%orgId\":[\"" + organizationId + "\"]%";
+        String roleParam = "%" + role + "%";
+
+        try {
+            List<String> infos = jdbcTemplate.query(USERS_BY_ORGANIZATION_ROLE_QUERY, (rs, rowNum) -> {
+                return rs.getString(1);
+            }, organizationParam, roleParam);
+
+            return infos;
+        } catch (EmptyResultDataAccessException e) {
+            logger.debug("No userInfo available");
+            return null;
+        }
+
     }
 
     @Override
