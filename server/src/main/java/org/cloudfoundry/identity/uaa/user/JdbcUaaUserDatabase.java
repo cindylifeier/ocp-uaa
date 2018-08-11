@@ -50,6 +50,7 @@ import static org.springframework.util.StringUtils.hasText;
  */
 public class JdbcUaaUserDatabase implements UaaUserDatabase {
 
+    public static final String PRACTITIONER_RESOURCE_TYPE = "Practitioner";
     private static Log logger = LogFactory.getLog(JdbcUaaUserDatabase.class);
 
     public static final String USER_FIELDS = "id,username,password,email,givenName,familyName,created,lastModified,authorities,origin,external_id,verified,identity_zone_id,salt,passwd_lastmodified,phoneNumber,legacy_verification_behavior,passwd_change_required,last_logon_success_time,previous_logon_success_time ";
@@ -68,7 +69,7 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
     public static final String USERS_BY_ORGANIZATION_ID_QUERY = "select users.id, users.givenname, users.familyname, groups.displayName, groups.description, user_info.info from users " +
             "left join group_membership on users.id = group_membership.member_id left join groups on groups.id = group_membership.group_id inner join user_info on users.id = user_info.user_id and user_info.info ilike ? and user_info.info ilike ?";
 
-    public static final String USERS_BY_ORGANIZATION_ROLE_QUERY = "select info from group_membership, user_info, groups where info ilike ? and user_info.user_id = group_membership.member_id and groups.id = group_membership.group_id and displayName ilike ?;";
+    public static final String USERS_BY_ORGANIZATION_ROLE_QUERY = "select info from group_membership, user_info, groups where info ilike ? and user_info.user_id = group_membership.member_id and groups.id = group_membership.group_id and displayName ilike ?";
 
     private final TimeService timeService;
 
@@ -171,17 +172,23 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
         String organizationParam = "%orgId\":[\"" + organizationId + "\"]%";
         String roleParam = "%" + role + "%";
 
-        try {
-            List<String> infos = jdbcTemplate.query(USERS_BY_ORGANIZATION_ROLE_QUERY, (rs, rowNum) -> {
-                return rs.getString(1);
-            }, organizationParam, roleParam);
+        List<String> infos = jdbcTemplate.query(USERS_BY_ORGANIZATION_ROLE_QUERY, (rs, rowNum) -> {
+            String infoString = "";
+            try {
+                String info = rs.getString(1);
+                ObjectMapper mapper = new ObjectMapper();
 
-            return infos;
-        } catch (EmptyResultDataAccessException e) {
-            logger.debug("No userInfo available");
-            return null;
-        }
+                Info infoObj = mapper.readValue(info, Info.class);
+                infoString = PRACTITIONER_RESOURCE_TYPE + "/" +infoObj.getUserAttributes().getId().get(0);
+            } catch (IOException e) {
+                logger.error("IOException during parsing the string value of the query");
 
+            }
+
+            return infoString;
+        }, organizationParam, roleParam);
+
+        return infos;
     }
 
     @Override

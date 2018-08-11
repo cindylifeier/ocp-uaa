@@ -15,6 +15,7 @@ package org.cloudfoundry.identity.uaa.user;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Interface for loading user data for the UAA.

@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * In-memory user account information storage.
@@ -91,6 +92,7 @@ public class InMemoryUaaUserDatabase implements UaaUserDatabase {
 
     @Override
     public Object retrievePractitionersByOrganizationAndRole(String organizationId, String uaaRole) {
+        //not implemented (not used)
         return null;
     }
 

@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.security.Principal;
+import java.util.Optional;
 
 import static org.cloudfoundry.identity.uaa.oauth.token.ClaimConstants.ROLES;
 import static org.cloudfoundry.identity.uaa.oauth.token.ClaimConstants.USER_ATTRIBUTES;
@@ -126,7 +127,7 @@ public class UserInfoEndpoint implements InitializingBean {
 
     @RequestMapping(value = "/practitionerByOrganizationAndRole")
     @ResponseBody
-    public Object retrievePractitionersByOrganizationAndRole(@RequestParam(required = true, value = "organization") String organizationId, @RequestParam(required = true, value = "role") String uaaRole) {
+    public Object retrievePractitionersByOrganizationAndRole(@RequestParam(required = true, value = "organization") String organizationId, @RequestParam(required = false, value = "role") String uaaRole) {
         return userDatabase.retrievePractitionersByOrganizationAndRole(organizationId, uaaRole);
     }
 }
