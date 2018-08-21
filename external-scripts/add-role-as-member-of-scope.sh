@@ -63,10 +63,10 @@ echo $response
 
 
 clear
-echo -e "Please enter permission scope : "
+echo -e "Please enter permission scope (Ex: ocpUiApi.task_read) : "
 read scope
 
-echo -e "Please enter role scope : "
+echo -e "Please enter role scope (Ex: ocp.role.organizationAdministrator) : "
 read role
 
 echo -e "${red}Step 1 of 2:  getting token...${reset}"
