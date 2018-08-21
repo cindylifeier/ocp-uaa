@@ -108,4 +108,9 @@ public class InMemoryUaaUserDatabase implements UaaUserDatabase {
         return null;
     }
 
+    public List<UserDto> getUsersByFhirResource(String resourceId, String resource) {
+        //Not implemented for InMemory db
+        return null;
+    }
+
 }

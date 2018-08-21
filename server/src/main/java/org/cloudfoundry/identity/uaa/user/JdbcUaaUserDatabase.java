@@ -62,8 +62,11 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
 
     public static final String DEFAULT_USER_BY_ID_QUERY = "select " + USER_FIELDS + "from users where id = ? and active=? and identity_zone_id=?";
 
-    public static final String USERS_BY_ORGANIZATION_ID_QUERY = "select users.id, users.givenname, users.familyname, groups.displayName, groups.description, user_info.info from users " +
+    public static final String USERS_BY_TWO_USERINFO_CRITERIA = "select users.id, users.givenname, users.familyname, groups.displayName, groups.description, user_info.info, users.username, groups.id from users " +
             "left join group_membership on users.id = group_membership.member_id left join groups on groups.id = group_membership.group_id inner join user_info on users.id = user_info.user_id and user_info.info ilike ? and user_info.info ilike ?";
+
+    public static final String USERS_BY_ONE_USERINFO_CRITERIA = "select users.id, users.givenname, users.familyname, groups.displayName, groups.description, user_info.info, users.username, groups.id from users " +
+            "left join group_membership on users.id = group_membership.member_id left join groups on groups.id = group_membership.group_id inner join user_info on users.id = user_info.user_id and user_info.info ilike ?";
 
 
     private final TimeService timeService;
@@ -145,16 +148,42 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
         String searchString = "%orgId\":[\"" + organizationId + "\"]%";
         String resourceString = "%\"resource\":[\"" + resource + "\"]%";
         try {
-            List<UserDto> userInfos = jdbcTemplate.query(USERS_BY_ORGANIZATION_ID_QUERY, (rs, rowNum) -> {
+            List<UserDto> userInfos = jdbcTemplate.query(USERS_BY_TWO_USERINFO_CRITERIA, (rs, rowNum) -> {
                 String id = rs.getString(1);
                 String givenName = rs.getString(2);
                 String familyName = rs.getString(3);
                 String displayName = rs.getString(4);
                 String description = rs.getString(5);
                 String info = rs.getString(6);
+                String username = rs.getString(7);
+                String groupId = rs.getString(8);
 
-                return new UserDto(id, givenName, familyName, displayName, description, info);
+                return new UserDto(id, username, givenName, familyName, displayName, description, info, groupId);
             }, searchString, resourceString);
+
+            return userInfos;
+        } catch (EmptyResultDataAccessException e) {
+            logger.debug("No userInfo available");
+            return null;
+        }
+    }
+
+    public List<UserDto> getUsersByFhirResource(String resourceId, String resourceType) {
+        String resourceString = "%\"resource\":[\"" + resourceType + "\"],\"id\":[\""+resourceId+"\"]%";
+        System.out.println(resourceString);
+        try {
+            List<UserDto> userInfos = jdbcTemplate.query(USERS_BY_ONE_USERINFO_CRITERIA, (rs, rowNum) -> {
+                String id = rs.getString(1);
+                String givenName = rs.getString(2);
+                String familyName = rs.getString(3);
+                String displayName = rs.getString(4);
+                String description = rs.getString(5);
+                String info = rs.getString(6);
+                String username = rs.getString(7);
+                String groupId = rs.getString(8);
+
+                return new UserDto(id, username, givenName, familyName, displayName, description, info, groupId);
+            }, resourceString);
 
             return userInfos;
         } catch (EmptyResultDataAccessException e) {
