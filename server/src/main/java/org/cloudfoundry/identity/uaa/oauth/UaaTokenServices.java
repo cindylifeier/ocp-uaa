@@ -155,6 +155,7 @@ public class UaaTokenServices implements AuthorizationServerTokenServices, Resou
 
     // SMART on FHIR constants
     public static final String LAUNCH_CONTEXT_SCOPE_PREFIX = "launch/";
+    public static final String LAUNCH_PATIENT_CONTEXT_SCOPE = "launch/patient";
     public static final String USER_LAUNCH_CONTEXT_KEY = "user";
 
     private final Log logger = LogFactory.getLog(getClass());
@@ -659,7 +660,9 @@ public class UaaTokenServices implements AuthorizationServerTokenServices, Resou
                 .ifPresent(launch -> {
                     final RestTemplate restTemplate = restTemplateFactory.getRestTemplate(false);
                     final Map<String, Object> launchParams = restTemplate.getForObject(smartLaunchContextUri, Map.class, launch, userId);
-                    final Set<String> requestedLaunchScopes = requestedScopes.stream().filter(scope -> scope.startsWith(LAUNCH_CONTEXT_SCOPE_PREFIX)).collect(toSet());
+                    Set<String> requestedLaunchScopes = requestedScopes.stream().filter(scope -> scope.startsWith(LAUNCH_CONTEXT_SCOPE_PREFIX)).collect(toSet());
+                    // Mark patient context as required by default
+                    requestedLaunchScopes.add(LAUNCH_PATIENT_CONTEXT_SCOPE);
                     launchParams.entrySet().stream()
                             .filter(entry -> requestedLaunchScopes.contains(LAUNCH_CONTEXT_SCOPE_PREFIX + entry.getKey()) || USER_LAUNCH_CONTEXT_KEY.equals(entry.getKey()))
                             .forEach(entry -> {

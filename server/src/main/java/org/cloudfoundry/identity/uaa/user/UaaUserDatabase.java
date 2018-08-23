@@ -31,6 +31,8 @@ public interface UaaUserDatabase {
 
     List<UserDto> getUsersByOrganizationId(String organizationId, String resource);
 
+    List<UserDto> getUsersByFhirResource(String resourceId, String resource);
+
     UserInfo storeUserInfo(String id, UserInfo info);
 
     void updateLastLogonTime(String id);

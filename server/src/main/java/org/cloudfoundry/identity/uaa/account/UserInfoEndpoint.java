@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.ws.rs.BadRequestException;
 import java.security.Principal;
 import java.util.Optional;
 
@@ -75,8 +76,12 @@ public class UserInfoEndpoint implements InitializingBean {
 
     @RequestMapping(value = "/userinfos")
     @ResponseBody
-    public Object getUsersByOrganizationId(@RequestParam(required = true, value = "organizationId") String organizationId, @RequestParam(value = "resource", required = true) String resource) {
-        return userDatabase.getUsersByOrganizationId(organizationId, resource);
+    public Object getUsersByOrganizationId(@RequestParam(value = "organizationId", required = false) String organizationId, @RequestParam(value = "resource") String resource, @RequestParam(value = "resourceId", required = false) String resourceId) {
+        if (organizationId != null && resource != null)
+            return userDatabase.getUsersByOrganizationId(organizationId, resource);
+        if (resourceId != null && resource != null)
+            return userDatabase.getUsersByFhirResource(resourceId, resource);
+        throw new BadRequestException("Must provider valid search criteria");
     }
 
     protected UaaPrincipal extractUaaPrincipal(OAuth2Authentication authentication) {
