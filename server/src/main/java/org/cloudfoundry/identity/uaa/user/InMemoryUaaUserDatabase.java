@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * In-memory user account information storage.
@@ -87,6 +88,12 @@ public class InMemoryUaaUserDatabase implements UaaUserDatabase {
     @Override
     public void updateLastLogonTime(String id) {
         retrieveUserById(id).setLastLogonTime(System.currentTimeMillis());
+    }
+
+    @Override
+    public Object retrievePractitionersByOrganizationAndRole(String organizationId, String uaaRole) {
+        //not implemented (not used)
+        return null;
     }
 
     public UaaUser updateUser(String userId, UaaUser user) throws UsernameNotFoundException {

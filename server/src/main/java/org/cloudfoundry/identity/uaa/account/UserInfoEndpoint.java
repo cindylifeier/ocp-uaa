@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.ws.rs.BadRequestException;
 import java.security.Principal;
+import java.util.Optional;
 
 import static org.cloudfoundry.identity.uaa.oauth.token.ClaimConstants.ROLES;
 import static org.cloudfoundry.identity.uaa.oauth.token.ClaimConstants.USER_ATTRIBUTES;
@@ -127,6 +128,12 @@ public class UserInfoEndpoint implements InitializingBean {
         userAttributes.remove(USER_ID_KEY);
         userDatabase.storeUserInfo(userId, new UserInfo().setUserAttributes(userAttributes));
 
+    }
+
+    @RequestMapping(value = "/practitionerByOrganizationAndRole")
+    @ResponseBody
+    public Object retrievePractitionersByOrganizationAndRole(@RequestParam(required = true, value = "organization") String organizationId, @RequestParam(required = false, value = "role") String uaaRole) {
+        return userDatabase.retrievePractitionersByOrganizationAndRole(organizationId, uaaRole);
     }
 }
 
