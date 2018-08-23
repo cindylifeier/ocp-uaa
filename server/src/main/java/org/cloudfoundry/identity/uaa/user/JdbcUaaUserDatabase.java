@@ -12,9 +12,11 @@
  *******************************************************************************/
 package org.cloudfoundry.identity.uaa.user;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cloudfoundry.identity.uaa.account.ocp.dto.Info;
 import org.cloudfoundry.identity.uaa.util.JsonUtils;
 import org.cloudfoundry.identity.uaa.util.TimeService;
 import org.cloudfoundry.identity.uaa.zone.IdentityZoneHolder;
@@ -28,6 +30,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -48,6 +51,7 @@ import static org.springframework.util.StringUtils.hasText;
 public class JdbcUaaUserDatabase implements UaaUserDatabase {
 
     private static Log logger = LogFactory.getLog(JdbcUaaUserDatabase.class);
+    public static final String PRACTITIONER_RESOURCE_TYPE = "Practitioner";
 
     public static final String USER_FIELDS = "id,username,password,email,givenName,familyName,created,lastModified,authorities,origin,external_id,verified,identity_zone_id,salt,passwd_lastmodified,phoneNumber,legacy_verification_behavior,passwd_change_required,last_logon_success_time,previous_logon_success_time ";
 
@@ -68,6 +72,7 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
     public static final String USERS_BY_ONE_USERINFO_CRITERIA = "select users.id, users.givenname, users.familyname, groups.displayName, groups.description, user_info.info, users.username, groups.id from users " +
             "left join group_membership on users.id = group_membership.member_id left join groups on groups.id = group_membership.group_id inner join user_info on users.id = user_info.user_id and user_info.info ilike ?";
 
+    public static final String USERS_BY_ORGANIZATION_ROLE_QUERY = "select info from group_membership, user_info, groups where info ilike ? and user_info.user_id = group_membership.member_id and groups.id = group_membership.group_id and displayName ilike ?";
 
     private final TimeService timeService;
 
@@ -166,6 +171,29 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
             logger.debug("No userInfo available");
             return null;
         }
+    }
+
+    public Object retrievePractitionersByOrganizationAndRole(String organizationId, String role) {
+        String organizationParam = "%orgId\":[\"" + organizationId + "\"]%";
+        String roleParam = "%" + role + "%";
+
+        List<String> infos = jdbcTemplate.query(USERS_BY_ORGANIZATION_ROLE_QUERY, (rs, rowNum) -> {
+            String infoString = "";
+            try {
+                String info = rs.getString(1);
+                ObjectMapper mapper = new ObjectMapper();
+
+                Info infoObj = mapper.readValue(info, Info.class);
+                infoString = PRACTITIONER_RESOURCE_TYPE + "/" +infoObj.getUserAttributes().getId().get(0);
+            } catch (IOException e) {
+                logger.error("IOException during parsing the string value of the query");
+
+            }
+
+            return infoString;
+        }, organizationParam, roleParam);
+
+        return infos;
     }
 
     public List<UserDto> getUsersByFhirResource(String resourceId, String resourceType) {
