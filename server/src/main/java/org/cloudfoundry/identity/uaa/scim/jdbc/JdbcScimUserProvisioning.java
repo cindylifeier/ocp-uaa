@@ -85,6 +85,8 @@ public class JdbcScimUserProvisioning extends AbstractQueryable<ScimUser>
 
     public static final String DELETE_USER_SQL = "delete from users where id=? and identity_zone_id=?";
 
+    public static final String DELETE_USER_INFO_SQL = "delete from user_info where user_id=?";
+
     public static final String UPDATE_PASSWD_LASTMODIFIED_SQL = "update users set passwd_lastmodified=? where id=? and identity_zone_id=?";
 
     public static final String CHANGE_PASSWORD_SQL = "update users set lastModified=?, password=?, passwd_lastmodified=? where id=? and identity_zone_id=?";
@@ -410,6 +412,7 @@ public class JdbcScimUserProvisioning extends AbstractQueryable<ScimUser>
         else {
             updated = jdbcTemplate.update(DELETE_USER_SQL + " and version=?", userId, zoneId, version);
         }
+        jdbcTemplate.update(DELETE_USER_INFO_SQL, userId);
         return updated;
 
     }
