@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.ws.rs.BadRequestException;
 import java.security.Principal;
-import java.util.Optional;
+import java.util.List;
 
 import static org.cloudfoundry.identity.uaa.oauth.token.ClaimConstants.ROLES;
 import static org.cloudfoundry.identity.uaa.oauth.token.ClaimConstants.USER_ATTRIBUTES;
@@ -82,6 +82,12 @@ public class UserInfoEndpoint implements InitializingBean {
         if (resourceId != null && resource != null)
             return userDatabase.getUsersByFhirResource(resourceId, resource);
         throw new BadRequestException("Must provider valid search criteria");
+    }
+
+    @RequestMapping(value = "/user-roles")
+    @ResponseBody
+    public Object getUserRoles(@RequestParam(value = "fhirIds") List<String> fhirIds) {
+        return userDatabase.getUserRoles(fhirIds);
     }
 
     protected UaaPrincipal extractUaaPrincipal(OAuth2Authentication authentication) {
