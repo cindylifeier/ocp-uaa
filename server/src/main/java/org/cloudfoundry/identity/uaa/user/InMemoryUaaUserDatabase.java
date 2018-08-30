@@ -120,4 +120,10 @@ public class InMemoryUaaUserDatabase implements UaaUserDatabase {
         return null;
     }
 
+    @Override
+    public Map<String, UserDto> getUserRoles(List<String> fhirIds) {
+        //Not implemented for InMemory db
+        return null;
+    }
+
 }
