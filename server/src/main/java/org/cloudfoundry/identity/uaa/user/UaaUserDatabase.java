@@ -40,5 +40,5 @@ public interface UaaUserDatabase {
 
     Object retrievePractitionersByOrganizationAndRole(String organizationId, String uaaRole);
 
-    Map<String, UserDto> getUserRoles(List<String> fhirIds);
+    Map<String, List<UserDto>> getUserRoles(List<String> fhirIds);
 }

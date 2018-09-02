@@ -226,14 +226,14 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
     }
 
     @Override
-    public Map<String, UserDto> getUserRoles(List<String> fhirIds) {
+    public Map<String, List<UserDto>> getUserRoles(List<String> fhirIds) {
         StringJoiner joiner = new StringJoiner(" or ", "(", ")");
         fhirIds.stream().forEach(fhirId -> {
             joiner.add("user_info.info ilike '%\"id\":[\"" + fhirId + "\"]%'");
         });
         String finalQuery = USER_ROLES_QUERY + joiner.toString();
 
-        Map<String, UserDto> map = new HashMap<>();
+        Map<String, List<UserDto>> map = new HashMap<>();
         try {
             jdbcTemplate.query(finalQuery, (rs, rowNum) -> {
                 String id = rs.getString(1);
@@ -255,7 +255,17 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
                 String username = rs.getString(7);
                 String groupId = rs.getString(8);
 
-                map.put(fhirId, new UserDto(id, username, givenName, familyName, displayName, description, info, groupId));
+                UserDto userDto = new UserDto(id, username, givenName, familyName, displayName, description, info, groupId);
+
+                List<UserDto> list = new ArrayList<>();
+
+                if(map.get(fhirId) != null) {
+                    list = map.get(fhirId);
+                }
+
+                list.add(userDto);
+
+                map.put(fhirId, list);
 
                 return null;
             });
