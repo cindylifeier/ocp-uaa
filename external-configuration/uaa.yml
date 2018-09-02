@@ -246,8 +246,8 @@ scim:
     patient/Appointment.write: Write Appointment data on the current patient
 
     # Clinical
-    patient/AllergyIntolerence.read: Read AllergyIntolerence data on the current patient
-    patient/AllergyIntolerence.write: Write AllergyIntolerence data on the current patient
+    patient/AllergyIntolerance.read: Read AllergyIntolerance data on the current patient
+    patient/AllergyIntolerance.write: Write AllergyIntolerance data on the current patient
 
     patient/Condition.read: Read Condition data on the current patient
     patient/Condition.write: Write Condition data on the current patient
