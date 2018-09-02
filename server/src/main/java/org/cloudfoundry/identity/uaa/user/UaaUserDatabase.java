@@ -15,6 +15,7 @@ package org.cloudfoundry.identity.uaa.user;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -38,4 +39,6 @@ public interface UaaUserDatabase {
     void updateLastLogonTime(String id);
 
     Object retrievePractitionersByOrganizationAndRole(String organizationId, String uaaRole);
+
+    Map<String, List<UserDto>> getUserRoles(List<String> fhirIds);
 }

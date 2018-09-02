@@ -35,11 +35,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import static org.springframework.util.StringUtils.hasText;
 
@@ -73,6 +75,9 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
             "left join group_membership on users.id = group_membership.member_id left join groups on groups.id = group_membership.group_id inner join user_info on users.id = user_info.user_id and user_info.info ilike ?";
 
     public static final String USERS_BY_ORGANIZATION_ROLE_QUERY = "select info from group_membership, user_info, groups where info ilike ? and user_info.user_id = group_membership.member_id and groups.id = group_membership.group_id and displayName ilike ?";
+
+    public static String USER_ROLES_QUERY = "select users.id, users.givenname, users.familyname, groups.displayName, groups.description, user_info.info, users.username, groups.id from users left join group_membership on users.id = group_membership.member_id left join groups on groups.id = group_membership.group_id inner join user_info on users.id = user_info.user_id and ";
+
 
     private final TimeService timeService;
 
@@ -214,6 +219,58 @@ public class JdbcUaaUserDatabase implements UaaUserDatabase {
             }, resourceString);
 
             return userInfos;
+        } catch (EmptyResultDataAccessException e) {
+            logger.debug("No userInfo available");
+            return null;
+        }
+    }
+
+    @Override
+    public Map<String, List<UserDto>> getUserRoles(List<String> fhirIds) {
+        StringJoiner joiner = new StringJoiner(" or ", "(", ")");
+        fhirIds.stream().forEach(fhirId -> {
+            joiner.add("user_info.info ilike '%\"id\":[\"" + fhirId + "\"]%'");
+        });
+        String finalQuery = USER_ROLES_QUERY + joiner.toString();
+
+        Map<String, List<UserDto>> map = new HashMap<>();
+        try {
+            jdbcTemplate.query(finalQuery, (rs, rowNum) -> {
+                String id = rs.getString(1);
+                String givenName = rs.getString(2);
+                String familyName = rs.getString(3);
+                String displayName = rs.getString(4);
+                String description = rs.getString(5);
+
+                String fhirId = "";
+                String info = rs.getString(6);
+                try {
+                    ObjectMapper mapper = new ObjectMapper();
+                    Info infoObj = mapper.readValue(info, Info.class);
+                    fhirId = infoObj.getUserAttributes().getId().get(0);
+                } catch (IOException e) {
+                    logger.error("Error occured while parsing info string");
+                }
+
+                String username = rs.getString(7);
+                String groupId = rs.getString(8);
+
+                UserDto userDto = new UserDto(id, username, givenName, familyName, displayName, description, info, groupId);
+
+                List<UserDto> list = new ArrayList<>();
+
+                if(map.get(fhirId) != null) {
+                    list = map.get(fhirId);
+                }
+
+                list.add(userDto);
+
+                map.put(fhirId, list);
+
+                return null;
+            });
+
+            return map;
         } catch (EmptyResultDataAccessException e) {
             logger.debug("No userInfo available");
             return null;
