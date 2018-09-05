@@ -75,13 +75,13 @@ database:
   username: ${UAA_DB_USER:postgres}
   password: ${UAA_DB_PASSWORD:admin}
 uaa:
-  url: http://localhost:8080/uaa
+  url: http://${UAA_PUBLIC_HOST:localhost}:${UAA_PUBLIC_PORT:8080}/uaa
   token:
-    url: http://localhost:8080/uaa/oauth/token
+    url: http://${UAA_PUBLIC_HOST:localhost}:${UAA_PUBLIC_PORT:8080}/uaa/oauth/token
   approvals:
-    url: http://localhost:8080/uaa/approvals
+    url: http://${UAA_PUBLIC_HOST:localhost}:${UAA_PUBLIC_PORT:8080}/uaa/approvals
   login:
-    url: http://localhost:8080/uaa/authenticate
+    url: http://${UAA_PUBLIC_HOST:localhost}:${UAA_PUBLIC_PORT:8080}/uaa/authenticate
 oauth:
   clients:
     ocp-ui:
@@ -110,13 +110,13 @@ oauth:
       scope: uaa.none
       authorities: scim.write,scim.read,openid,password.write
 smart:
-  launch-context-uri: http://localhost:8445/launch/{launch}?user={user}
+  launch-context-uri: http://${SMART_LAUNCH_HOST:localhost}:${SMART_LAUNCH_PORT:8445}/launch/{launch}?user={user}
 logout:
   redirect:
     parameter:
       whitelist:
         - http://localhost:3000/
-        - http://localhost/ocp-ui/
+        - http://${UAA_REDIRECT_UI:localhost}/ocp-ui/
 scim:
   groups:
     ocpUi.access: Access OCP UI
