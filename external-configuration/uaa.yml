@@ -71,8 +71,8 @@ smtp:
 spring_profiles: postgresql
 database:
   driverClassName: org.postgresql.Driver
-  url: jdbc:postgresql:uaa
-  username: postgres
+  url: jdbc:postgresql://${UAA_DB_HOST:localhost}:${UAA_DB_PORT:5432}/uaa
+  username: ${UAA_DB_USER:postgres}
   password: ${UAA_DB_PASSWORD:admin}
 uaa:
   url: http://localhost:8080/uaa
