@@ -121,75 +121,75 @@ scim:
   groups:
     ocpUi.access: Access OCP UI
 
-    ocpUiApi.activityDefinition_create: Create a ActivityDefinition FHIR Resource
-    ocpUiApi.activityDefinition_read: Read a specific/restricted ActivityDefinition FHIR Resource
-    ocpUiApi.activityDefinition_update: Update a ActivityDefinition FHIR Resource
-    ocpUiApi.activityDefinition_delete: Delete ActivityDefinition FHIR Resource
+    ocpUiApi.activityDefinition_create: Create a ActivityDefinition
+    ocpUiApi.activityDefinition_read: Read a specific/restricted ActivityDefinition
+    ocpUiApi.activityDefinition_update: Update a ActivityDefinition
+    ocpUiApi.activityDefinition_delete: Delete a ActivityDefinition
 
-    ocpUiApi.appointment_create: Create an Appointment FHIR Resource
-    ocpUiApi.appointment_read: Read a specific/restricted Appointment FHIR Resource
-    ocpUiApi.appointment_update: Update an Appointment FHIR Resource
-    ocpUiApi.appointment_delete: Delete Appointment FHIR Resource
+    ocpUiApi.appointment_create: Create an Appointment
+    ocpUiApi.appointment_read: Read a specific/restricted Appointment
+    ocpUiApi.appointment_update: Update an Appointment
+    ocpUiApi.appointment_delete: Delete an Appointment
 
-    ocpUiApi.careTeam_create: Create a CareTeam FHIR Resource
-    ocpUiApi.careTeam_read: Read a specific/restricted CareTeam FHIR Resource
-    ocpUiApi.careTeam_update: Update a CareTeam FHIR Resource
-    ocpUiApi.careTeam_delete: Delete CareTeam FHIR Resource
+    ocpUiApi.careTeam_create: Create a CareTeam
+    ocpUiApi.careTeam_read: Read a specific/restricted CareTeam
+    ocpUiApi.careTeam_update: Update a CareTeam
+    ocpUiApi.careTeam_delete: Delete a CareTeam
 
-    ocpUiApi.communication_create: Create a Communication FHIR Resource
-    ocpUiApi.communication_read: Read a specific/restricted Communication FHIR Resource
-    ocpUiApi.communication_update: Update a Communication FHIR Resource
-    ocpUiApi.communication_delete: Delete Communication FHIR Resource
+    ocpUiApi.communication_create: Create a Communication
+    ocpUiApi.communication_read: Read a specific/restricted Communication
+    ocpUiApi.communication_update: Update a Communication
+    ocpUiApi.communication_delete: Delete a Communication
 
-    ocpUiApi.consent_create: Create a Consent FHIR Resource
-    ocpUiApi.consent_read: Read a specific/restricted Consent FHIR Resource
-    ocpUiApi.consent_update: Update a Consent FHIR Resource
-    ocpUiApi.consent_delete: Delete Consent FHIR Resource
+    ocpUiApi.consent_create: Create a Consent
+    ocpUiApi.consent_read: Read a specific/restricted Consent
+    ocpUiApi.consent_update: Update a Consent
+    ocpUiApi.consent_delete: Delete a Consent
 
-    ocpUiApi.healthcareService_create: Create a HealthCareService FHIR Resource
-    ocpUiApi.healthcareService_read: Read a specific/restricted HealthCareService FHIR Resource
-    ocpUiApi.healthcareService_assign: Assign a HealthCareService FHIR Resource to an Organization
-    ocpUiApi.healthcareService_unassign: Un-Assign a HealthCareService FHIR Resource from an Organization
-    ocpUiApi.healthcareService_update: Update a HealthCareService FHIR Resource
-    ocpUiApi.healthcareService_delete: Delete HealthCareService FHIR Resource
+    ocpUiApi.healthcareService_create: Create a HealthCareService
+    ocpUiApi.healthcareService_read: Read a specific/restricted HealthCareService
+    ocpUiApi.healthcareService_assign: Assign a HealthCareService to an Organization
+    ocpUiApi.healthcareService_unassign: Un-Assign a HealthCareService from an Organization
+    ocpUiApi.healthcareService_update: Update a HealthCareService
+    ocpUiApi.healthcareService_delete: Delete a HealthCareService
 
-    ocpUiApi.location_create: Create a Location FHIR Resource
-    ocpUiApi.location_read: Read a specific/restricted Location FHIR Resource
-    ocpUiApi.location_update: Update a Location FHIR Resource
-    ocpUiApi.location_delete: Delete Location FHIR Resource
+    ocpUiApi.location_create: Create a Location
+    ocpUiApi.location_read: Read a specific/restricted Location
+    ocpUiApi.location_update: Update a Location
+    ocpUiApi.location_delete: Delete a Location
 
-    ocpUiApi.organization_create: Write Organization FHIR Resource
-    ocpUiApi.organization_read: Read a specific/restricted Organization FHIR Resource
-    ocpUiApi.organization_update: Update an Organization FHIR Resource
-    ocpUiApi.organization_delete: Delete Organization FHIR Resource
+    ocpUiApi.organization_create: Create an Organization
+    ocpUiApi.organization_read: Read a specific/restricted Organization
+    ocpUiApi.organization_update: Update an Organization
+    ocpUiApi.organization_delete: Delete an Organization
 
-    ocpUiApi.patient_create: Create a Patient FHIR Resource
-    ocpUiApi.patient_read: Read a specific/restricted Patient FHIR Resource
-    ocpUiApi.patient_update: Update a Patient FHIR Resource
-    ocpUiApi.patient_delete: Delete Patient FHIR Resource
+    ocpUiApi.patient_create: Create a Patient
+    ocpUiApi.patient_read: Read a specific/restricted Patient
+    ocpUiApi.patient_update: Update a Patient
+    ocpUiApi.patient_delete: Delete Patient
 
-    ocpUiApi.practitioner_create: Create a Practitioner FHIR Resource
-    ocpUiApi.practitioner_read: Read a specific/restricted Practitioner FHIR Resource
-    ocpUiApi.practitioner_update: Update a Practitioner FHIR Resource
-    ocpUiApi.practitioner_delete: Delete Practitioner FHIR Resource
+    ocpUiApi.practitioner_create: Create a Practitioner
+    ocpUiApi.practitioner_read: Read a specific/restricted Practitioner
+    ocpUiApi.practitioner_update: Update a Practitioner
+    ocpUiApi.practitioner_delete: Delete Practitioner
 
-    ocpUiApi.relatedPerson_create: Create a RelatedPerson FHIR Resource
-    ocpUiApi.relatedPerson_read: Read a specific/restricted RelatedPerson FHIR Resource
-    ocpUiApi.relatedPerson_update: Update a RelatedPerson FHIR Resource
-    ocpUiApi.relatedPerson_delete: Delete RelatedPerson FHIR Resource
+    ocpUiApi.relatedPerson_create: Create a RelatedPerson
+    ocpUiApi.relatedPerson_read: Read a specific/restricted RelatedPerson
+    ocpUiApi.relatedPerson_update: Update a RelatedPerson
+    ocpUiApi.relatedPerson_delete: Delete RelatedPerson
 
-    ocpUiApi.task_read: Read a specific/restricted Task FHIR Resource
-    ocpUiApi.task_create: Create a Task FHIR Resource
-    ocpUiApi.task_update: Update a Task FHIR Resource
-    ocpUiApi.task_delete: Delete Task FHIR Resource
+    ocpUiApi.task_create: Create a Task
+    ocpUiApi.task_read: Read a specific/restricted Task
+    ocpUiApi.task_update: Update a Task
+    ocpUiApi.task_delete: Delete Task
 
-    ocpUiApi.group_read: Read a UAA group
     ocpUiApi.group_create: Create a UAA group
+    ocpUiApi.group_read: Read a UAA group
     ocpUiApi.group_update: Update a UAA group
     ocpUiApi.group_delete: Delete a UAA group
 
-    ocpUiApi.user_read: Read a UAA user
     ocpUiApi.user_create: Create a UAA user
+    ocpUiApi.user_read: Read a UAA user
     ocpUiApi.user_update: Update a UAA user
     ocpUiApi.user_delete: Delete a UAA user
 
