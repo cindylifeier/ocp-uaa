@@ -166,22 +166,22 @@ scim:
     ocpUiApi.patient_create: Create a Patient
     ocpUiApi.patient_read: Read a specific/restricted Patient
     ocpUiApi.patient_update: Update a Patient
-    ocpUiApi.patient_delete: Delete Patient
+    ocpUiApi.patient_delete: Delete a Patient
 
     ocpUiApi.practitioner_create: Create a Practitioner
     ocpUiApi.practitioner_read: Read a specific/restricted Practitioner
     ocpUiApi.practitioner_update: Update a Practitioner
-    ocpUiApi.practitioner_delete: Delete Practitioner
+    ocpUiApi.practitioner_delete: Delete a Practitioner
 
     ocpUiApi.relatedPerson_create: Create a RelatedPerson
     ocpUiApi.relatedPerson_read: Read a specific/restricted RelatedPerson
     ocpUiApi.relatedPerson_update: Update a RelatedPerson
-    ocpUiApi.relatedPerson_delete: Delete RelatedPerson
+    ocpUiApi.relatedPerson_delete: Delete a RelatedPerson
 
     ocpUiApi.task_create: Create a Task
     ocpUiApi.task_read: Read a specific/restricted Task
     ocpUiApi.task_update: Update a Task
-    ocpUiApi.task_delete: Delete Task
+    ocpUiApi.task_delete: Delete a Task
 
     ocpUiApi.group_create: Create a UAA group
     ocpUiApi.group_read: Read a UAA group
